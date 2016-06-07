@@ -6,6 +6,7 @@ const AddressForm = require('./addressForm.jsx');
 const MapResults = require('./map.jsx');
 const ResultList = require('./resultListItem.jsx');
 const SignUp = require('./SignUp.jsx');
+const UserLogin = require('./userLogin.jsx');
 const $ = require('jquery');
 
 var App = React.createClass({
@@ -15,6 +16,8 @@ var App = React.createClass({
       numberOfPeople: 2,
       currentPage: 'signUpPage',
       resultsData: '',
+      username: '',
+      password: '',
     });
   },
 
@@ -77,7 +80,6 @@ var App = React.createClass({
       url: 'http://localhost:3000/meet',
       data: addressFormData,
       success: function (response) {
-        console.log(response);
         let result = response;
         this.setState({
           resultsData: result,
@@ -85,6 +87,39 @@ var App = React.createClass({
         });
       }.bind(this),
     });
+  },
+  //userlogin for all these handlers below (3)
+  handleSubmit: function(e) {
+    e.preventDefault();
+    //need to send username and password
+    //and check database to see if it is in there
+    var userDataObj = { userData: {
+      username:this.state.username,
+      password:this.state.password,
+      }
+    }
+
+    $.ajax({
+      type: 'POST',
+      url: 'http://localhost:3000/login',
+      data: userDataObj,
+      success: function (response) {
+        this.setState({
+          currentPage: 'addressesPage',
+        });
+      }.bind(this),
+      error: function(err) {
+        return alert('Wrong Info');
+      }
+    });
+  },
+
+  handleUserChange: function(e) {
+    this.setState({username:e.target.value});
+  },
+
+  handlePasswordChange: function(e) {
+    this.setState({password:e.target.value});
   },
 
   userData: function() {
@@ -115,7 +150,6 @@ var App = React.createClass({
       url: 'http://localhost:3000/createuser',
       data: userDataObj,
       success: function (response) {
-        console.log('successful create user');
         this.setState({
           currentPage: 'addressesPage',
         });
@@ -156,8 +190,15 @@ var App = React.createClass({
     if (this.state.currentPage === 'signUpPage') {
       return (
         <div>
+          <UserLogin
+            userValue={this.state.username}
+            passwordValue ={this.state.password}
+            handleSubmit={this.handleSubmit}
+            handleUserChange={this.handleUserChange}
+            handlePasswordChange={this.handlePasswordChange}
+            />
           <SignUp />
-          <button className="button-primary" onClick={this.signUpUser}>Sign Up</button>
+          <button className="button-primary" >Sign Up</button>
         </div>
       );
     }
@@ -165,4 +206,4 @@ var App = React.createClass({
 
 });
 
-ReactDom.render(<App />, document.getElementById('app'));
+module.exports = App;
