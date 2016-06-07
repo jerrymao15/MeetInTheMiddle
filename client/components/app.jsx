@@ -8,6 +8,7 @@ const ResultList = require('./resultListItem.jsx');
 const SignUp = require('./SignUp.jsx');
 const UserLogin = require('./userLogin.jsx');
 const $ = require('jquery');
+const AddAddress = require('./AddAddress.jsx');
 
 var App = React.createClass({
 
@@ -18,6 +19,12 @@ var App = React.createClass({
       resultsData: '',
       username: '',
       password: '',
+      addAddress: {
+        name: '',
+        street: '',
+        city: '',
+        state: '',
+      },
     });
   },
 
@@ -159,14 +166,73 @@ var App = React.createClass({
       }
     });
   },
-
+  handleChangeAddName: function(e) {
+    this.setState({
+      addAddress: {
+        name: e.target.value,
+        street: this.state.addAddress.street,
+        city: this.state.addAddress.city,
+        state: this.state.addAddress.state,
+      },
+    });
+  },
+  handleChangeAddStreet: function(e) {
+    this.setState({
+      addAddress: {
+        name: this.state.addAddress.name,
+        street: e.target.value,
+        city: this.state.addAddress.city,
+        state: this.state.addAddress.state,
+      },
+    });
+  },
+  handleChangeAddCity: function(e) {
+    this.setState({
+      addAddress: {
+        name: this.state.addAddress.name,
+        street: this.state.addAddress.street,
+        city: e.target.value,
+        state: this.state.addAddress.state,
+      },
+    });
+  },
+  handleChangeAddState: function(e) {
+    this.setState({
+      addAddress: {
+        name: this.state.addAddress.name,
+        street: this.state.addAddress.street,
+        city: this.state.addAddress.city,
+        state: e.target.value,
+      },
+    });
+  },
+  handleAddAddress: function(e) {
+    e.preventDefault();
+    $.ajax({
+      type: 'POST',
+      url: 'http://localhost:3000/addAddress',
+      data: this.state.addAddress,
+      success: function (response) {
+        console.log('add address successfully')
+        this.state.addAddress = {};
+      }.bind(this),
+      error: function(err) {
+        console.log('error adding address to the database');
+      },
+    });
+  },
   render: function () {
-
     if (this.state.currentPage === 'addressesPage') {
       var formFields = this.addForms();
       var activityCheckboxes = this.addActivities();
       return (
         <div>
+          <AddAddress
+            handleAddAddress={this.handleAddAddress}
+            handleChangeAddName={this.handleChangeAddName}
+            handleChangeAddStreet={this.handleChangeAddStreet}
+            handleChangeAddCity={this.handleChangeAddCity}
+            handleChangeAddState={this.handleChangeAddState} />
           {formFields}
           <button className="button-primary" onClick={this.addSingleForm}>Add Address</button>
           <h4>Where do you want to meet?</h4>
