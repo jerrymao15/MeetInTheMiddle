@@ -20,23 +20,23 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
 app.get('/', function (req, res) {
-	res.sendFile(path.resolve('./index.html'));
+  res.sendFile(path.resolve('./index.html'));
 });
 
 //post route with middleware for meetup requests
 //route should be consolidated with helper functions
 app.post('/meet', dataHandler.parseInput, googleApiFunctions.getCoordinates,
-		googleApiFunctions.findCentralLocation, yelpApiFunctions.generateUrl,
-		yelpApiFunctions.queryLocationData, dataHandler.sendOutput);
+    googleApiFunctions.findCentralLocation, yelpApiFunctions.generateUrl,
+    yelpApiFunctions.queryLocationData, dataHandler.sendOutput);
 
 app.post('/createuser', databaseOps.createUser, (req, res) => {
-	if (req.body.databaseResponse.hasOwnProperty('errors')) return res.status(404).end();
-	res.send(req.body.databaseResponse);
+  if (req.body.databaseResponse.hasOwnProperty('errors')) return res.status(404).end();
+  res.send(req.body.databaseResponse);
 });
 
 app.post('/login', databaseOps.verifyUser, (req, res) => {
-	if (req.body.databaseResponse) return res.status(404).send(req.body.databaseResponse);
-	return res.status(200).end();
+  if (req.body.databaseResponse) return res.status(404).send(req.body.databaseResponse);
+  return res.status(200).end();
 })
 
 app.listen(3000);
