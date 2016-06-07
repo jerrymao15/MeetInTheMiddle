@@ -39,10 +39,13 @@ app.post('/createuser', databaseOps.createUser, (req, res) => {
 	res.send(req.body.databaseResponse);
 });
 
-app.post('/login', databaseOps.verifyUser, (req, res) => {
-  if (req.body.databaseResponse) return res.status(404).send(req.body.databaseResponse);
-  return res.status(200).end();
-})
+app.post('/login',
+  databaseOps.verifyUser,
+  // databaseOps.getUserAddressBook,
+  (req, res) => {
+    console.log(req.body.databaseResponse);
+    res.send(req.body.databaseResponse);
+  });
 
 app.post('/distance', googleApiFunctions.findTravelTime, (req, res) => {
   return res.send(req.body.calculatedDistance);
