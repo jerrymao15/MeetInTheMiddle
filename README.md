@@ -1,4 +1,4 @@
-# MeetInTheMiddle
+# MeetInTheMiddle [![Build Status](https://travis-ci.org/cs-slick/MeetInTheMiddle.svg?branch=master)](https://travis-ci.org/cs-slick/MeetInTheMiddle)
 Find the midway point between friends and find the best places to go!
 
 ##Existing Features
