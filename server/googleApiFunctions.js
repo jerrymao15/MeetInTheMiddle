@@ -94,8 +94,16 @@ googleApiFunctions.findTravelTime = function(req, res, next) {
   }
 
   distanceData.then(results => {
-    console.log(results);
-    req.body.calculatedDistance = results;
+    const resultArr = [];
+    results.forEach(yelp => {
+      resultArr.push({
+        distance: yelp.elements[0].distance.text,
+        travelTime: yelp.elements[0].duration.text
+      })
+    })
+    console.log(results); //for testing purposes
+    console.log(resultArr);
+    req.body.calculatedDistance = resultArr;
     next()
   })
   .catch(err => {
