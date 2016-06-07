@@ -7,7 +7,7 @@ import AddressForm from '../client/components/addressForm';
 
 
 
-describe('React unit tests: AddressForm', () => {
+describe('React unit tests: AddressForm', function() {
 
 
   it('should have className row', function() {
