@@ -30,9 +30,13 @@ app.post('/addAddress', databaseOps.createAddress, (req, res) => {
 	res.send(req.body.databaseResponse);
 })
 
-app.post('/meet', dataHandler.parseInput, googleApiFunctions.getCoordinates,
-    googleApiFunctions.findCentralLocation, yelpApiFunctions.generateUrl,
-    yelpApiFunctions.queryLocationData, dataHandler.sendOutput);
+app.post('/meet',
+  dataHandler.parseInput,
+  googleApiFunctions.getCoordinates,
+  googleApiFunctions.findCentralLocation,
+  yelpApiFunctions.generateUrl,
+  yelpApiFunctions.queryLocationData,
+  dataHandler.sendOutput);
 
 app.post('/createuser', databaseOps.createUser, (req, res) => {
 	if (req.body.databaseResponse.hasOwnProperty('errors')) return res.status(404).end();
@@ -43,7 +47,6 @@ app.post('/login',
   databaseOps.verifyUser,
   // databaseOps.getUserAddressBook,
   (req, res) => {
-    console.log(req.body.databaseResponse);
     res.send(req.body.databaseResponse);
   });
 
