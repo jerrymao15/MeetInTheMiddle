@@ -34,6 +34,7 @@ dataHandler.sendOutput = function (req, res, next) {
       longitude: req.body.averageLocation[1],
     },
     meetSuggestions: req.body.businessArray,
+    userCoords: req.body.coordinateData
   }
   res.send(outputObject);
 }
