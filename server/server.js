@@ -25,13 +25,18 @@ app.get('/', function (req, res) {
 
 //post route with middleware for meetup requests
 //route should be consolidated with helper functions
+app.post('/addAddress', databaseOps.createAddress, (req, res) => {
+	if (req.body.databaseResponse.hasOwnProperty('errors')) return res.status(404).end();
+	res.send(req.body.databaseResponse);
+})
+
 app.post('/meet', dataHandler.parseInput, googleApiFunctions.getCoordinates,
     googleApiFunctions.findCentralLocation, yelpApiFunctions.generateUrl,
     yelpApiFunctions.queryLocationData, dataHandler.sendOutput);
 
 app.post('/createuser', databaseOps.createUser, (req, res) => {
-  if (req.body.databaseResponse.hasOwnProperty('errors')) return res.status(404).end();
-  res.send(req.body.databaseResponse);
+	if (req.body.databaseResponse.hasOwnProperty('errors')) return res.status(404).end();
+	res.send(req.body.databaseResponse);
 });
 
 app.post('/login', databaseOps.verifyUser, (req, res) => {

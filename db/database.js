@@ -32,7 +32,6 @@ const databaseOps = {
 
   // creates a user in the database
   createUser: (req, res, next) => {
-    console.log('req body userdata: ',req.body.userData);
     let Users = databaseOps.usersModel;
     //establish connection with database and prepare to add new user
     let usersTablePromise = Users.sync({ logging: console.log });
@@ -74,6 +73,8 @@ const databaseOps = {
     state: {type: Sequelize.STRING, allowNull: false},
     // TODO:add a column for userID to store the link
   }),
+
+  usersModel.belongsTo(addressesModel);
   // addressData is passed via the request body
   createAddress: (req, res, next) => {
     let Addresses = databaseOps.addressesModel;
@@ -83,7 +84,7 @@ const databaseOps = {
     //Addresses.belongsTo(databaseOps.usersModel);
 
     //establishes connection with database and prepare to add new addresses
-    let addressesTablePromise = Addresses.sync({ logging: console.log, force: true });
+    let addressesTablePromise = Addresses.sync({ logging: console.log });
 
     addressesTablePromise.then(() => {
       // Addresses.bulkCreate(addressData);
@@ -93,7 +94,10 @@ const databaseOps = {
         //TODO: add error handling
         req.body.databaseResponse = JSON.stringify(databaseResponse);
         next();
-      });
+      }).catch(function(err) {
+        req.body.databaseResponse = err;
+        next();
+      });;
     });
   },
 };
