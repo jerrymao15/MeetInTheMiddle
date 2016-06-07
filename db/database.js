@@ -55,7 +55,15 @@ const databaseOps = {
     // user login verification details will come in on the req body
     // think about bcrypt.compareSync(myPlaintextPassword, hash); // true
     let Users = databaseOps.usersModel;
-    Users.findOne({ where: {username: req.body.userData.username} })
+    Users.findOne({ where: {username: req.body.userData.username} }).then(function(user) {
+      if (!user) {
+        req.body.databaseResponse = {message: 'Incorrect username.'};
+      }
+      if (!bcrypt.compareSync(req.body.userData.password, user.password)) {
+        req.body.databaseResponse = {message: 'Incorrect password.'};
+      }
+      next();
+    });
   },
 // sets up the address model for the database
   addressesModel: sequelize.define('addresses', {

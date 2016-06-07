@@ -35,7 +35,8 @@ app.post('/createuser', databaseOps.createUser, (req, res) => {
 });
 
 app.post('/login', databaseOps.verifyUser, (req, res) => {
-	
+	if (req.body.databaseResponse) return res.status(404).send(req.body.databaseResponse);
+	return res.status(200).end();
 })
 
 app.listen(3000);

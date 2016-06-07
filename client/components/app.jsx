@@ -121,7 +121,7 @@ var App = React.createClass({
         });
       }.bind(this),
       error: function(err) {
-        console.log('ajax error: ', err);
+        return alert('Username already exists, please choose another one');
       }
     });
   },
