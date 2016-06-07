@@ -34,7 +34,7 @@ const databaseOps = {
   createUser: (req, res, next) => {
     let Users = databaseOps.usersModel;
     //establish connection with database and prepare to add new user
-    let usersTablePromise = Users.sync({ logging: console.log, force: true });
+    let usersTablePromise = Users.sync({ logging: console.log });
     usersTablePromise.then(() => {
     	// userData is being passed via the request body
       Users.create(req.body.userData)
@@ -42,6 +42,9 @@ const databaseOps = {
         //when we get a response from the database we will pass that back to the front end to prove a successful database save
         //TODO: add error handling
         req.body.databaseResponse = JSON.stringify(databaseResponse);
+        next();
+      }).catch(function(err) {
+        req.body.databaseResponse = err;
         next();
       });
     });

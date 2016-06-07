@@ -102,7 +102,14 @@ var App = React.createClass({
 
   logInUser: function () {
     var userDataObj = { userData: this.userData() };
-    console.log(userDataObj);
+
+    if (userDataObj.userData.firstname === '' ||
+    userDataObj.userData.lastname === '' ||
+    userDataObj.userData.password === '' ||
+    userDataObj.userData.username === '') {
+      return alert('Please fill out all fields ;)');
+    }
+
     $.ajax({
       type: 'POST',
       url: 'http://localhost:3000/createuser',
@@ -113,6 +120,9 @@ var App = React.createClass({
           currentPage: 'addressesPage',
         });
       }.bind(this),
+      error: function(err) {
+        console.log('ajax error: ', err);
+      }
     });
   },
 
