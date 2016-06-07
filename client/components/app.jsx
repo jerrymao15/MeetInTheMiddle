@@ -5,7 +5,7 @@ const ActivityChoice = require('./activityChoices.jsx');
 const AddressForm = require('./addressForm.jsx');
 const MapResults = require('./map.jsx');
 const ResultList = require('./resultListItem.jsx');
-const Login = require('./loginPage.jsx');
+const SignUp = require('./SignUp.jsx');
 const $ = require('jquery');
 
 var App = React.createClass({
@@ -13,7 +13,7 @@ var App = React.createClass({
   getInitialState: function () {
     return ({
       numberOfPeople: 2,
-      currentPage: 'loginPage',
+      currentPage: 'signUpPage',
       resultsData: '',
     });
   },
@@ -100,7 +100,7 @@ var App = React.createClass({
     return userData;
   },
 
-  logInUser: function () {
+  signUpUser: function () {
     var userDataObj = { userData: this.userData() };
 
     if (userDataObj.userData.firstname === '' ||
@@ -153,11 +153,11 @@ var App = React.createClass({
       );
     }
 
-    if (this.state.currentPage === 'loginPage') {
+    if (this.state.currentPage === 'signUpPage') {
       return (
         <div>
-          <Login />
-          <button className="button-primary" onClick={this.logInUser}>Sign Up</button>
+          <SignUp />
+          <button className="button-primary" onClick={this.signUpUser}>Sign Up</button>
         </div>
       );
     }
