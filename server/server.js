@@ -44,6 +44,10 @@ app.post('/login', databaseOps.verifyUser, (req, res) => {
   return res.status(200).end();
 })
 
+app.post('/distance', googleApiFunctions.findTravelTime, (req, res) => {
+  return res.send(req.body.calculatedDistance);
+})
+
 app.listen(3000);
 
 module.exports = app;
