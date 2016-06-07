@@ -80,7 +80,6 @@ var App = React.createClass({
       url: 'http://localhost:3000/meet',
       data: addressFormData,
       success: function (response) {
-        console.log(response);
         let result = response;
         this.setState({
           resultsData: result,
@@ -94,25 +93,25 @@ var App = React.createClass({
     e.preventDefault();
     //need to send username and password
     //and check database to see if it is in there
-    var userDataObj = {
+    var userDataObj = { userData: {
       username:this.state.username,
       password:this.state.password,
+      }
     }
-    console.log(userDataObj);
-    // $.ajax({
-    //   type: 'POST',
-    //   url: 'http://localhost:3000/createuser',
-    //   data: userDataObj,
-    //   success: function (response) {
-    //     console.log('successful create user');
-    //     this.setState({
-    //       currentPage: 'addressesPage',
-    //     });
-    //   }.bind(this),
-    //   error: function(err) {
-    //     console.log('ajax error: ', err);
-    //   }
-    // });
+
+    $.ajax({
+      type: 'POST',
+      url: 'http://localhost:3000/login',
+      data: userDataObj,
+      success: function (response) {
+        this.setState({
+          currentPage: 'addressesPage',
+        });
+      }.bind(this),
+      error: function(err) {
+        return alert('Wrong Info');
+      }
+    });
   },
 
   handleUserChange: function(e) {
@@ -151,7 +150,6 @@ var App = React.createClass({
       url: 'http://localhost:3000/createuser',
       data: userDataObj,
       success: function (response) {
-        console.log('successful create user');
         this.setState({
           currentPage: 'addressesPage',
         });
