@@ -70,4 +70,38 @@ googleApiFunctions.findCentralLocation = function(req, res, next) {
   })
 };
 
+googleApiFunctions.findTravelTime = function(req, res, next) {
+  const url1 = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=',
+  start = `${req.yelp_coord.latitude},${req.yelp_coord.longitude}`, //lat and longitude
+  destinations = '&destinations=',
+  googleApiKey = privateKeys.googleApiKey;
+
+  req.body.user_coords.forEach(coord => {
+    destinations += `|${coord.latitude},${coord.longitude}`
+  })
+  destinations = destinations.replace('|', '');
+
+  const finalURL = url1+start+destinations+googleApiKey;
+  console.log(finalURL, 'string');
+
+  function distanceData(start) {
+    return new Promise((resolve, reject) => {
+      request(finalURL, (err, res, body) => {
+        if (err) reject(err);
+        resolve(JSON.parse(body));
+      })
+    })
+  }
+
+  distanceData.then(results => {
+    console.log(results);
+    req.body.calculatedDistance = results;
+    next()
+  })
+  .catch(err => {
+    console.log('Failed promise while parsing distance data');
+    next();
+  })
+}
+
 module.exports = googleApiFunctions;
