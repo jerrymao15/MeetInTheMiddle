@@ -74,7 +74,7 @@ const databaseOps = {
     // TODO:add a column for userID to store the link
   }),
 
-  usersModel.belongsTo(addressesModel);
+  // usersModel.belongsTo(addressesModel);
   // addressData is passed via the request body
   createAddress: (req, res, next) => {
     let Addresses = databaseOps.addressesModel;
