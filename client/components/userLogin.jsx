@@ -6,14 +6,16 @@ var UserLogin = React.createClass({
     return (
       <form onSubmit={this.props.handleSubmit}>
         <input
+          type='text'
           id='username'
           value={this.props.userValue}
           onChange={this.props.handleUserChange} />
         <input
+          type='password'
           id='password'
           value={this.props.passwordValue}
           onChange={this.props.handlePasswordChange} />
-        <button>Sign Up</button>
+        <button>Login</button>
       </form>
      );
   }

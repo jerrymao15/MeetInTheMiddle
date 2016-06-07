@@ -1,3 +1,6 @@
 'use strict';
-const react = require("react");
-const app = require('./components/app.jsx');
+const React = require("react");
+const App = require('./components/app.jsx');
+const ReactDom = require('react-dom');
+
+ReactDom.render(<App />, document.getElementById('app'));
