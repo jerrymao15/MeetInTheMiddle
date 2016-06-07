@@ -32,6 +32,7 @@ const databaseOps = {
 
   // creates a user in the database
   createUser: (req, res, next) => {
+    console.log('req body userdata: ',req.body.userData);
     let Users = databaseOps.usersModel;
     //establish connection with database and prepare to add new user
     let usersTablePromise = Users.sync({ logging: console.log });
@@ -53,6 +54,8 @@ const databaseOps = {
   verifyUser: (req, res, next) => {
     // user login verification details will come in on the req body
     // think about bcrypt.compareSync(myPlaintextPassword, hash); // true
+    let Users = databaseOps.usersModel;
+    Users.findOne({ where: {username: req.body.userData.username} })
   },
 // sets up the address model for the database
   addressesModel: sequelize.define('addresses', {
