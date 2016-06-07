@@ -34,6 +34,10 @@ app.post('/createuser', databaseOps.createUser, (req, res) => {
 	res.send(req.body.databaseResponse);
 });
 
+app.post('/login', databaseOps.verifyUser, (req, res) => {
+	
+})
+
 app.listen(3000);
 
 module.exports = app;
