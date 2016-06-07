@@ -15,20 +15,30 @@ googleApiFunctions.getCoordinates = function(req, res, next) {
     longitudes: [],
   };
 
-  request(req.body.inputUrlArray[0], function (error, response, body) {
-    let data = JSON.parse(body);
 
-    coordinateData.latitudes.push(data.results[0].geometry.location.lat);
-    coordinateData.longitudes.push(data.results[0].geometry.location.lng);
+  function googRequest(url) {
+    return new Promise((resolve, reject) => {
+      request(url, function(err, res, body) {
+        resolve(JSON.parse(body));
+      })
+    })
+  }
 
-    request(req.body.inputUrlArray[1], function (error, response, body) {
-      data = JSON.parse(body);
-      coordinateData.latitudes.push(data.results[0].geometry.location.lat);
-      coordinateData.longitudes.push(data.results[0].geometry.location.lng);
+  const promiseArr = req.body.inputUrlArray.map(googRequest);
+
+  Promise.all(promiseArr)
+    .then(results => {
+      results.forEach(datas => {
+        coordinateData.latitudes.push(datas.results[0].geometry.location.lat);
+        coordinateData.longitudes.push(datas.results[0].geometry.location.lng);
+      })
       req.body.coordinateData = coordinateData;
       next();
     })
-  })
+    .catch(err => {
+      console.log('Failed promise somewhere');
+      next();
+    })
 };
 
 //Implementing averaging of coordinates and finding the location of the center

@@ -9,7 +9,6 @@ dataHandler.parseInput = function (req, res, next) {
   let baseUrl = 'https://maps.googleapis.com/maps/api/geocode/json?address=';
   let urlArray = [];
 
-  console.log(req.body);
 
   for (let i = 0; i < req.body.inputArray.length; i++) {
     let url = baseUrl;
