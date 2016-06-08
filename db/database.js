@@ -27,12 +27,6 @@ var User = sequelize.define('users', {
       }
     }
   }
-//   { classMethods: {
-//     associate: function() {
-//       User.hasMany(Address);
-//     }
-//   }
-// }
 );
 
 var Address = sequelize.define('addresses', {

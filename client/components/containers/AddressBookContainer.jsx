@@ -8,12 +8,12 @@ class AddressBookContainer extends Component {
     this.state = {
       isShowingModal: false
     };
-    this.handleAddAddress = this.handleAddAddress.bind(this);
+    this.handleOpenModal = this.handleOpenModal.bind(this);
     this.handleCloseModal = this.handleCloseModal.bind(this);
     this.handleAddAddress = this.handleAddAddress.bind(this);
   }
 
-  handleAddAddress(e) {
+  handleOpenModal(e) {
     this.setState({
       isShowingModal: true,
     })
@@ -38,7 +38,7 @@ class AddressBookContainer extends Component {
       <div>
         <div style={{display: 'inline-block'}}>
           <h4>Address Book</h4>
-          <button onClick={this.handleAddAddress}>Add</button>
+          <button onClick={this.handleOpenModal}>Add</button>
         </div>
         {
           this.state.isShowingModal &&
