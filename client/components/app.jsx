@@ -81,6 +81,10 @@ var App = React.createClass({
   submitInputData: function () {
     let addressFormData = { inputArray: this.formData() };
     let checkedActivities = this.activityData();
+    const friends = [];
+    for (let i = 0; i < addressFormData.inputArray.length; i++) {
+      friends.push(addressFormData.inputArray[i].name)
+    }
     // Only posting addressFormData for now
     $.ajax({
       type: 'POST',
@@ -89,6 +93,7 @@ var App = React.createClass({
       success: function (response) {
         let result = response;
         this.setState({
+          friends: friends,
           resultsData: result,
           currentPage: 'resultsPage',
         });
