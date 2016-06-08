@@ -13,7 +13,10 @@ var ResultListItem = React.createClass({
         phone={suggestion.display_phone}
         ratingImgURL={suggestion.rating_img_url_large}
         text={suggestion.snippet_text}
+        yelpURL={suggestion.url}
         findDistance={this.props.findDistance.bind(this,i)}
+        travelData={this.props.travelData}
+        friends={this.props.friends}
         />);
     });
     return suggestionArray;

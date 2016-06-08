@@ -9,13 +9,15 @@ const SignUp = require('./SignUp.jsx');
 const UserLogin = require('./userLogin.jsx');
 const $ = require('jquery');
 const AddAddress = require('./AddAddress.jsx');
+import {ModalContainer, ModalDialog} from 'react-modal-dialog';
 
 var App = React.createClass({
 
   getInitialState: function () {
     return ({
+      travelData: [],
       numberOfPeople: 2,
-      currentPage: 'addressesPage',
+      currentPage: 'signUpPage',
       resultsData: '',
       username: '',
       password: '',
@@ -251,6 +253,9 @@ var App = React.createClass({
       data: object,
       success: function (response) {
         console.log(response);
+        this.setState({
+          travelData: response
+        });
       }.bind(this),
       error: function(err) {
         console.log('something fucked up');
@@ -285,7 +290,12 @@ var App = React.createClass({
       return (
         <div>
           <MapResults data={this.state.resultsData} />
-          <ResultList data={this.state.resultsData} findDistance={this.findDistance} />
+          <ResultList
+            data={this.state.resultsData}
+            findDistance={this.findDistance}
+            travelData={this.state.travelData}
+            friends ={this.state.friends}
+            />
         </div>
       );
     }
