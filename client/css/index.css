@@ -166,8 +166,12 @@ p {
 /* Links
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 a {
+  margin: 0;
+  padding: 0;
   color: #1EAEDB; }
 a:hover {
+  margin: 0;
+  padding: 0;
   color: #0FA0CE; }
 
 

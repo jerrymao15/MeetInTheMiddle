@@ -18,7 +18,7 @@ var App = React.createClass({
       numberOfPeople: 2,
       travelData: [],
       categories:[],
-      currentPage: 'signUpPage',
+      currentPage: 'loginPage',
       resultsData: '',
       username: '',
       password: '',
@@ -92,6 +92,8 @@ var App = React.createClass({
         // this.state.sourceAddressArr.concat(response);
         var responseArr = this.state.contacts.concat(response);
         this.setState({
+          username: '',
+          password: '',
           currentPage: 'addressesPage',
           contacts: responseArr,
         });
@@ -306,7 +308,7 @@ var App = React.createClass({
       url: 'http://localhost:3000/login',
       success: function () {
         this.setState({
-          currentPage: 'signUpPage',
+          currentPage: 'loginPage',
         });
       }.bind(this),
       error: function(err) {
@@ -341,6 +343,12 @@ var App = React.createClass({
     this.setState({
       sourceAddressArr: newSourceAddressArr,
     });
+  },
+  handleRegisterAccount: function(e) {
+    e.preventDefault();
+    this.setState({
+      currentPage: 'signUpPage',
+    })
   },
   render: function () {
     if (this.state.currentPage === 'addressesPage') {
@@ -391,17 +399,19 @@ var App = React.createClass({
     }
 
     if (this.state.currentPage === 'signUpPage') {
+      return <SignUp onSubmit={this.signUpUser} />;
+    }
+
+    if (this.state.currentPage === 'loginPage') {
       return (
-        <div>
           <UserLogin
             userValue={this.state.username}
             passwordValue ={this.state.password}
             handleSubmit={this.handleSubmit}
             handleUserChange={this.handleUserChange}
             handlePasswordChange={this.handlePasswordChange}
+            onClick={this.handleRegisterAccount}
             />
-          <SignUp onSubmit={this.signUpUser} />
-        </div>
       );
     }
   },
