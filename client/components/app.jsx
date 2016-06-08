@@ -15,7 +15,6 @@ var App = React.createClass({
 
   getInitialState: function () {
     return ({
-      numberOfPeople: 2,
       travelData: [],
       categories:[],
       currentPage: 'signUpPage',
@@ -33,21 +32,6 @@ var App = React.createClass({
       friends: [],
     });
   },
-
-  addForms: function () {
-    let formArray = [];
-    for (let i = 0; i < this.state.numberOfPeople; i++) {
-      formArray.push(<AddressForm id={i} />);
-    }
-    return formArray;
-  },
-
-  addSingleForm: function (e) {
-    e.preventDefault();
-    const people = this.state.numberOfPeople + 1;
-    this.setState({ numberOfPeople: people });
-  },
-
   addActivities: function () {
     const activityTypes = ['Restaurants', 'Active Life', 'Nightlife', 'Arts', 'Shopping'];
     let activitiesArray = [];
@@ -343,7 +327,7 @@ var App = React.createClass({
     if (this.state.currentPage === 'addressesPage') {
       return (
         <div>
-          <h4>Source Addresses</h4>
+          <h4>Who do you want to meet?</h4>
           <AddressFormsContainer
             formValuesArr={this.state.sourceAddressArr}
             onNameChange={this.handleAddressFormNameChange}
@@ -351,7 +335,6 @@ var App = React.createClass({
             onCityChange={this.handleAddressFromCityChange}
             onStateChange={this.handleAddressFromStateChange}
             />
-          <button className="button-primary" onClick={this.addSingleForm}>Add Address</button>
           <hr />
           <h4>Where do you want to meet?</h4>
           <div className="row">
