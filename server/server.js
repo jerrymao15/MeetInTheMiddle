@@ -31,7 +31,7 @@ app.get('/', function (req, res) {
 app.post('/addAddress', databaseOps.createAddress, (req, res) => {
 	if (req.body.databaseResponse.hasOwnProperty('errors')) return res.status(404).end();
   res.send(req.body.databaseResponse);
-})
+});
 
 app.post('/meet',
   dataHandler.parseInput,
@@ -51,13 +51,12 @@ app.post('/login',
   databaseOps.verifyUser,
   databaseOps.getUserAddressBook,
   (req, res) => {
-    console.log('req body db response', req.body.databaseResponse);
     res.send(req.body.databaseResponse);
   });
 
 app.post('/distance', googleApiFunctions.findTravelTime, (req, res) => {
   return res.send(req.body.calculatedDistance);
-})
+});
 
 app.listen(3000);
 

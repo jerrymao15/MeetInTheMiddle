@@ -14,4 +14,11 @@ describe("Add UserLogin to SignUp page", function() {
     const wrapper = mount(<App />).find('UserLogin').props();
     expect(Object.keys(wrapper).length).to.equal(5);
   });
+
 });
+
+describe('Should have an addressbook component', function() {
+  it('should have at least one address component', function() {
+    expect(shallow(<App />).find('AddressBook').length).to.equal(1);
+  });
+})
