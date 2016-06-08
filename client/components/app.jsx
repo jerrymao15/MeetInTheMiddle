@@ -1,6 +1,5 @@
 'use strict';
 const React = require('react');
-const ReactDom = require('react-dom');
 const ActivityChoice = require('./activityChoices.jsx');
 const AddressForm = require('./addressForm.jsx');
 const MapResults = require('./map.jsx');
@@ -8,14 +7,15 @@ const ResultList = require('./resultListItem.jsx');
 const SignUp = require('./SignUp.jsx');
 const UserLogin = require('./userLogin.jsx');
 const $ = require('jquery');
-const AddAddress = require('./AddAddress.jsx');
+import {ModalContainer, ModalDialog} from 'react-modal-dialog';
+const AddressBookContainer = require('./containers/AddressBookContainer.jsx')
 
 var App = React.createClass({
 
   getInitialState: function () {
     return ({
-      numberOfPeople: 2,
-      currentPage: 'addressesPage',
+      travelData: [],
+      currentPage: 'signUpPage',
       resultsData: '',
       username: '',
       password: '',
@@ -25,6 +25,7 @@ var App = React.createClass({
         city: '',
         state: '',
       },
+      friendName: '',
     });
   },
 
@@ -85,8 +86,6 @@ var App = React.createClass({
     for (let i = 0; i < addressFormData.inputArray.length; i++) {
       friends.push(addressFormData.inputArray[i].name)
     }
-    // Only posting addressFormData for now
-    console.log('inside success function for ajax meet');
     $.ajax({
       type: 'POST',
       url: 'http://localhost:3000/meet',
@@ -159,7 +158,6 @@ var App = React.createClass({
       alert('Please fill out all fields ;)');
     }
 
-    console.log(userDataObj.userData);
     $.ajax({
       type: 'POST',
       url: 'http://localhost:3000/createuser',
@@ -250,7 +248,9 @@ var App = React.createClass({
       url: 'http://localhost:3000/distance',
       data: object,
       success: function (response) {
-        console.log(response);
+        this.setState({
+          travelData: response
+        });
       }.bind(this),
       error: function(err) {
         console.log('something fucked up');
@@ -264,19 +264,21 @@ var App = React.createClass({
       var activityCheckboxes = this.addActivities();
       return (
         <div>
-          <AddAddress
-            handleAddAddress={this.handleAddAddress}
-            handleChangeAddName={this.handleChangeAddName}
-            handleChangeAddStreet={this.handleChangeAddStreet}
-            handleChangeAddCity={this.handleChangeAddCity}
-            handleChangeAddState={this.handleChangeAddState} />
-          {formFields}
+          <AddressForm id={0} />
           <button className="button-primary" onClick={this.addSingleForm}>Add Address</button>
+          <hr />
           <h4>Where do you want to meet?</h4>
           <div className="row">
             {activityCheckboxes}
           </div>
           <button className="button-primary" onClick={this.submitInputData}>Meet in the middle!</button>
+          <hr />
+          <AddressBookContainer
+            handleAddAddress={this.handleAddAddress}
+            handleChangeAddName={this.handleChangeAddName}
+            handleChangeAddStreet={this.handleChangeAddStreet}
+            handleChangeAddCity={this.handleChangeAddCity}
+            handleChangeAddState={this.handleChangeAddState} />
         </div>
       );
     }
@@ -285,7 +287,12 @@ var App = React.createClass({
       return (
         <div>
           <MapResults data={this.state.resultsData} />
-          <ResultList data={this.state.resultsData} findDistance={this.findDistance} />
+          <ResultList
+            data={this.state.resultsData}
+            findDistance={this.findDistance}
+            travelData={this.state.travelData}
+            friends ={this.state.friends}
+            />
         </div>
       );
     }

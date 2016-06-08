@@ -27,12 +27,6 @@ var User = sequelize.define('users', {
       }
     }
   }
-//   { classMethods: {
-//     associate: function() {
-//       User.hasMany(Address);
-//     }
-//   }
-// }
 );
 
 var Address = sequelize.define('addresses', {
@@ -126,6 +120,9 @@ const databaseOps = {
         return instance.dataValues;
       });
       req.body.databaseResponse = addressObj;
+      next();
+    }).catch(err => {
+      req.body.databaseResponse = [];
       next();
     });
   }
