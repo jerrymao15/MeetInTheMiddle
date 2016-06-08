@@ -56,10 +56,10 @@ var App = React.createClass({
     return activitiesArray;
   },
 
-  formData: function() {
+  getFormData: function() {
     // submiting ALL form data not just first one
     let formDataArray = [];
-    for (let i = 0; i < this.state.numberOfPeople; i++) {
+    for (let i = 0; i < 2; i++) {
       var friendId = 'form #friend' + i;
       var streetId = 'form #street' + i;
       var cityId = 'form #city' + i;
@@ -83,6 +83,7 @@ var App = React.createClass({
     for (let i = 0; i < addressFormData.inputArray.length; i++) {
       friends.push(addressFormData.inputArray[i].name)
     }
+    console.log('submit input data', addressFormData);
     $.ajax({
       type: 'POST',
       url: 'http://localhost:3000/meet',
@@ -95,6 +96,9 @@ var App = React.createClass({
           currentPage: 'resultsPage',
         });
       }.bind(this),
+      error: function(err) {
+        console.log('error processing input data', err);
+      }
     });
   },
   //userlogin for all these handlers below (3)
@@ -274,16 +278,16 @@ var App = React.createClass({
 
   render: function () {
     if (this.state.currentPage === 'addressesPage') {
-      var formFields = this.addForms();
-      var activityCheckboxes = this.addActivities();
       return (
         <div>
+          <h4>Source Addresses</h4>
           <AddressForm id={0} />
+          <AddressForm id={1} />
           <button className="button-primary" onClick={this.addSingleForm}>Add Address</button>
           <hr />
           <h4>Where do you want to meet?</h4>
           <div className="row">
-            {activityCheckboxes}
+            {this.addActivities()}
           </div>
           <button className="button-primary" onClick={this.submitInputData}>Meet in the middle!</button>
           <hr />

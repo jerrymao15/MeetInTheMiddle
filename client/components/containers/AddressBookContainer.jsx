@@ -26,7 +26,6 @@ class AddressBookContainer extends Component {
   }
 
   handleAddAddress(e) {
-    console.log('handle add address');
     this.props.handleAddAddress(e);
     this.setState({
       isShowingModal: false,
