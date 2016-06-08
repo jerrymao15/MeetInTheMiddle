@@ -89,7 +89,6 @@ var App = React.createClass({
         //loop through array and access each objet at its property name 'name'
         // this.state.sourceAddressArr.concat(response);
         var responseArr = this.state.contacts.concat(response);
-        console.log(responseArr)
         this.setState({
           currentPage: 'addressesPage',
           contacts: responseArr,
