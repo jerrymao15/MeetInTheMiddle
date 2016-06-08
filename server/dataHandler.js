@@ -19,7 +19,6 @@ dataHandler.parseInput = function (req, res, next) {
       }
     }
     url += '&key' + googleApiKey;
-    console.log(url);
     urlArray.push(url);
   }
 

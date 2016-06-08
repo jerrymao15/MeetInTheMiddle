@@ -6,11 +6,11 @@ var ListItem = React.createClass({
 
   render: function() {
     return (
-      <div className="four columns singleItem">
-        <h5>{suggestion.name}</h5>
-        <p>Phone: {suggestion.display_phone}</p>
-        <img role="presentation" src={suggestion.rating_img_url_large} />
-        <p>{suggestion.snippet_text}</p>
+      <div className="four columns singleItem" onClick={this.props.findDistance}>
+        <h5>{this.props.name}</h5>
+        <p>Phone: {this.props.phone}</p>
+        <img role="presentation" src={this.props.ratingImgURL} />
+        <p>{this.props.text}</p>
       </div>
     );
   }

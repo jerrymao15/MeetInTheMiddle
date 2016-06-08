@@ -5,9 +5,17 @@ var ResultListItem = React.createClass({
 
   displayListItems: function () {
     var suggestionArray = [];
+    const findD = this.props.findDistance;
     var meetSuggestions = this.props.data.meetSuggestions;
     meetSuggestions.forEach(function (suggestion,i) {
-      suggestionArray.push(<ListItem id={i}/>);
+      suggestionArray.push(<ListItem
+        key={i}
+        name={suggestion.name}
+        phone={suggestion.display_phone}
+        ratingImgURL={suggestion.rating_img_url_large}
+        text={suggestion.snippet_text}
+        findDistance={findD}
+        />);
     });
     return suggestionArray;
   },
