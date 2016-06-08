@@ -56,22 +56,7 @@ googleApiFunctions.findCentralLocation = function(req, res, next) {
   }) / elements;
 
   req.body.averageLocation = [latitudeAverage, longitudeAverage];
-
-  const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${req.body.averageLocation[0]},${req.body.averageLocation[1]}&key=${googleApiKey}`;
-  request(url, function (error, response, body) {
-    if (error) {
-      console.log('error finding central location');
-      return res.status(404).send(error);
-    }
-    let data = JSON.parse(body);
-    for (var i = 0; i < data.results[1].address_components.length; i++) {
-      if (data.results[1].address_components[i].types.indexOf('locality') !== -1) {
-        req.body.city = data.results[1].address_components[i].long_name;
-        continue;
-      }
-    }
-    next();
-  })
+  next();
 };
 
 googleApiFunctions.findTravelTime = function(req, res, next) {

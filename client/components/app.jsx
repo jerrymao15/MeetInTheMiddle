@@ -14,9 +14,10 @@ var App = React.createClass({
 
   getInitialState: function () {
     return ({
+      numberOfPeople: 2,
       travelData: [],
       categories:[],
-      currentPage: 'signUpPage',
+      currentPage: 'addressesPage',
       resultsData: '',
       username: '',
       password: '',
@@ -75,9 +76,10 @@ var App = React.createClass({
   },
 
   submitInputData: function () {
+    const that = this;
     let addressFormData = {
-      inputArray: this.formData(),
-      categories: this.state.categories
+      inputArray: that.getFormData(),
+      categories: that.state.categories
      };
     const friends = [];
     for (let i = 0; i < addressFormData.inputArray.length; i++) {
