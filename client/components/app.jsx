@@ -9,6 +9,7 @@ const UserLogin = require('./userLogin.jsx');
 const $ = require('jquery');
 import {ModalContainer, ModalDialog} from 'react-modal-dialog';
 const AddressBookContainer = require('./containers/AddressBookContainer.jsx')
+const AddressFormsContainer = require('./containers/AddressFormsContainer.jsx');
 
 var App = React.createClass({
 
@@ -17,7 +18,7 @@ var App = React.createClass({
       numberOfPeople: 2,
       travelData: [],
       categories:[],
-      currentPage: 'addressesPage',
+      currentPage: 'signUpPage',
       resultsData: '',
       username: '',
       password: '',
@@ -27,6 +28,7 @@ var App = React.createClass({
         city: '',
         state: '',
       },
+      sourceAddressArr: [],
       contacts: ['Add Custom Address'],
       friends: [],
     });
@@ -58,35 +60,15 @@ var App = React.createClass({
     }
     return activitiesArray;
   },
-
-  getFormData: function() {
-    // submiting ALL form data not just first one
-    let formDataArray = [];
-    for (let i = 0; i < 2; i++) {
-      var friendId = 'form #friend' + i;
-      var streetId = 'form #street' + i;
-      var cityId = 'form #city' + i;
-      var stateId = 'form #state' + i;
-      let personData = {};
-      personData.name = $(friendId).val();
-      personData.street = $(streetId).val();
-      personData.city = $(cityId).val();
-      personData.state = $(stateId).val();
-      formDataArray.push(personData);
-    }
-    return formDataArray;
-  },
-
   submitInputData: function () {
     let addressFormData = {
-      inputArray: this.getFormData(),
-      categories: this.state.categories
+      inputArray: this.state.sourceAddressArr,
+      categories: this.state.categories,
      };
     const friends = [];
     for (let i = 0; i < addressFormData.inputArray.length; i++) {
       friends.push(addressFormData.inputArray[i].name)
     }
-    console.log('submit input data', addressFormData);
     $.ajax({
       type: 'POST',
       url: 'http://localhost:3000/meet',
@@ -223,22 +205,22 @@ var App = React.createClass({
   },
   handleContactNameClick: function(e) {
     e.preventDefault();
-    console.log(e.target.innerHTML);
     var clickedName = e.target.innerHTML;
     //setstate for the source address
-    for (let i = 0; i < this.state.contacts; i++) {
+    for (let i = 0; i < this.state.contacts.length; i++) {
       //find the object with given name from e.targeet html
       for(var key in this.state.contacts[i]) {
         //append found object to source address THING!
         if (this.state.contacts[i][key] === clickedName) {
-          this.setstate({sourceAddressArr.push(this.state.contacts[i])});
+          const newSourceAddressArr = this.state.sourceAddressArr.slice();
+          newSourceAddressArr.push(this.state.contacts[i]);
+          this.setState({
+            sourceAddressArr: newSourceAddressArr,
+          });
           break;
         }
       }
     }
-
-
-
   },
   handleAddAddress: function(e) {
     e.preventDefault();
@@ -247,7 +229,6 @@ var App = React.createClass({
       url: 'http://localhost:3000/addAddress',
       data: this.state.addAddress,
       success: function (response) {
-        console.log(response);
         this.state.addAddress = {};
       }.bind(this),
       error: function(err) {
@@ -318,14 +299,46 @@ var App = React.createClass({
       }
     });
   },
-
+  handleAddressFormNameChange: function(i, e) {
+    const newSourceAddressArr = this.state.sourceAddressArr.slice();
+    newSourceAddressArr[i].name = e.target.value;
+    this.setState({
+      sourceAddressArr: newSourceAddressArr,
+    });
+  },
+  handleAddressFormStreetChange: function(i, e) {
+    const newSourceAddressArr = this.state.sourceAddressArr.slice();
+    newSourceAddressArr[i].street = e.target.value;
+    this.setState({
+      sourceAddressArr: newSourceAddressArr,
+    });
+  },
+  handleAddressFromCityChange: function(i, e) {
+    const newSourceAddressArr = this.state.sourceAddressArr.slice();
+    newSourceAddressArr[i].city = e.target.value;
+    this.setState({
+      sourceAddressArr: newSourceAddressArr,
+    });
+  },
+  handleAddressFromStateChange: function(i, e) {
+    const newSourceAddressArr = this.state.sourceAddressArr.slice();
+    newSourceAddressArr[i].state = e.target.value;
+    this.setState({
+      sourceAddressArr: newSourceAddressArr,
+    });
+  },
   render: function () {
     if (this.state.currentPage === 'addressesPage') {
       return (
         <div>
           <h4>Source Addresses</h4>
-          <AddressForm id={0} />
-          <AddressForm id={1} />
+          <AddressFormsContainer
+            formValuesArr={this.state.sourceAddressArr}
+            onNameChange={this.handleAddressFormNameChange}
+            onStreetChange={this.handleAddressFormStreetChange}
+            onCityChange={this.handleAddressFromCityChange}
+            onStateChange={this.handleAddressFromStateChange}
+            />
           <button className="button-primary" onClick={this.addSingleForm}>Add Address</button>
           <hr />
           <h4>Where do you want to meet?</h4>
