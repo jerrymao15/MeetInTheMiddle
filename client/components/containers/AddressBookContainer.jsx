@@ -37,12 +37,14 @@ class AddressBookContainer extends Component {
     return (
       <div>
         <div style={{display: 'inline-block'}}>
-          <h4>Address Book</h4>
-          <button onClick={this.handleOpenModal}>Add</button>
+          <div style={{marginLeft: 'auto', marginRight: 'auto'}}>
+            <h4 style={{float: 'left'}}>Address Book</h4>
+            <button style={{marginLeft: '16px'}} onClick={this.handleOpenModal}>Add</button>
+          </div>
+          <br/>
           <AddressBook
-          contactNames={this.props.contactNames}
-          handleContactNameClick={this.props.handleContactNameClick}
-          />
+            contactNames={this.props.contactNames}
+            handleContactNameClick={this.props.handleContactNameClick} />
         </div>
         {
           this.state.isShowingModal &&
