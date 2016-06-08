@@ -14,7 +14,7 @@ describe('React unit tests: AddressForm', function() {
     expect(shallow(<AddressForm />).is('.row')).to.equal(true);
   });
   it('should have className three columns', function() {
-    expect(mount(<AddressForm />).children().find('.three').length).to.equal(4);
+    expect(mount(<AddressForm />).children().find('.two').length).to.equal(4);
   });
 
   it('should have className cityName', function() {

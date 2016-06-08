@@ -8,7 +8,7 @@ import ActivityChoice from '../client/components/activityChoices';
 describe('ActivityChoice Component', function() {
 
   it('should have className three columns', function() {
-    expect(shallow(<ActivityChoice />).is('.three')).to.equal(true);
+    expect(shallow(<ActivityChoice />).is('.two')).to.equal(true);
   });
 
   it('should have child tag label', function() {
