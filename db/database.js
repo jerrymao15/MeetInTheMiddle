@@ -127,6 +127,9 @@ const databaseOps = {
       });
       req.body.databaseResponse = addressObj;
       next();
+    }).catch(err => {
+      req.body.databaseResponse = [];
+      next();
     });
   }
 };
