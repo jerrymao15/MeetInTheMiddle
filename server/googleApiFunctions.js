@@ -17,6 +17,7 @@ googleApiFunctions.getCoordinates = function(req, res, next) {
 
 
   function googRequest(url) {
+    console.log(url);
     return new Promise((resolve, reject) => {
       request(url, function(err, res, body) {
         resolve(JSON.parse(body));

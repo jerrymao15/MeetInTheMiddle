@@ -1,7 +1,11 @@
 'use strict';
 const React = require('react');
+import {Close} from 'rebass';
 
 var AddressForm = React.createClass({
+
+  handleClick(e){
+  },
 
   render: function () {
     return (
@@ -47,6 +51,9 @@ var AddressForm = React.createClass({
               onChange={this.props.onStateChange} />
           </div>
         </form>
+        <div className="one columns xout">
+          <Close onClick={this.props.onClose}/>
+        </div>
       </div>
     );
   },

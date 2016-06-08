@@ -7,17 +7,20 @@ const AddressFormsContainer = ({
   onStreetChange,
   onCityChange,
   onStateChange,
+  onClose
 }) => {
   return (
     <div>
       {formValuesArr.map((formValues, i) =>
           <AddressForm
             id={i}
+            key={i}
             formValues={formValues}
             onNameChange={onNameChange.bind(null, i)}
             onStreetChange={onStreetChange.bind(null, i)}
             onCityChange={onCityChange.bind(null, i)}
             onStateChange={onStateChange.bind(null, i)}
+            onClose ={onClose.bind(null, i)}
             />
       )}
     </div>

@@ -15,6 +15,7 @@ var App = React.createClass({
 
   getInitialState: function () {
     return ({
+      numberOfPeople: 2,
       travelData: [],
       categories:[],
       currentPage: 'signUpPage',
@@ -32,6 +33,7 @@ var App = React.createClass({
       friends: [],
     });
   },
+
   addActivities: function () {
     const activityTypes = ['Restaurants', 'Active Life', 'Nightlife', 'Arts', 'Shopping'];
     let activitiesArray = [];
@@ -217,6 +219,18 @@ var App = React.createClass({
       }
     }
   },
+
+  handleOnClose: function(i, e) {
+    console.log(i);
+    console.log(e);
+    e.preventDefault();
+    let copy = this.state.sourceAddressArr;
+    copy.splice(i, 1);
+    return this.setState({
+      sourceAddressArr:copy
+    });
+  },
+
   handleAddAddress: function(e) {
     e.preventDefault();
     $.ajax({
@@ -224,13 +238,7 @@ var App = React.createClass({
       url: 'http://localhost:3000/addAddress',
       data: this.state.addAddress,
       success: function (response) {
-        const parsedRes = JSON.parse(response);
-        const newContacts = this.state.contacts;
-        newContacts.push(parsedRes);
-        this.setState({
-          addAddress: {},
-          contacts: newContacts,
-        });
+        this.state.addAddress = {};
       }.bind(this),
       error: function(err) {
         console.log('error adding address to the database');
@@ -332,8 +340,8 @@ var App = React.createClass({
     if (this.state.currentPage === 'addressesPage') {
       return (
         <div>
-          <h4>Who do you want to meet?</h4>
           <AddressFormsContainer
+            onClose={this.handleOnClose}
             formValuesArr={this.state.sourceAddressArr}
             onNameChange={this.handleAddressFormNameChange}
             onStreetChange={this.handleAddressFormStreetChange}
