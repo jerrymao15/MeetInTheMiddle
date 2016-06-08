@@ -15,6 +15,7 @@ var App = React.createClass({
   getInitialState: function () {
     return ({
       travelData: [],
+      categories:[],
       currentPage: 'signUpPage',
       resultsData: '',
       username: '',
@@ -25,7 +26,6 @@ var App = React.createClass({
         city: '',
         state: '',
       },
-      friendName: '',
     });
   },
 
@@ -44,10 +44,14 @@ var App = React.createClass({
   },
 
   addActivities: function () {
-    const activityTypes = ['Restaurant', 'Park', 'Movie Theater', 'Mall'];
+    const activityTypes = ['Restaurants', 'Active Life', 'Nightlife', 'Arts', 'Shopping'];
     let activitiesArray = [];
     for (let i = 0, len = activityTypes.length; i < len; i++) {
-      activitiesArray.push(<ActivityChoice activity={activityTypes[i]} />);
+      activitiesArray.push(<ActivityChoice
+        activity={activityTypes[i]}
+        key={i}
+        grabCategories={this.grabCategories}
+        />);
     }
     return activitiesArray;
   },
@@ -70,22 +74,17 @@ var App = React.createClass({
     return formDataArray;
   },
 
-  activityData: function () {
-    let checkedBoxes = $('input[name="activityBox"]:checked');
-    var checkedBoxesValues = [];
-    for (var i = 0; i < checkedBoxes.length; i++) {
-      checkedBoxesValues.push(checkedBoxes[i].value);
-    }
-    return checkedBoxesValues;
-  },
-
   submitInputData: function () {
-    let addressFormData = { inputArray: this.formData() };
-    let checkedActivities = this.activityData();
+    let addressFormData = {
+      inputArray: this.formData(),
+      categories: this.state.categories
+     };
     const friends = [];
     for (let i = 0; i < addressFormData.inputArray.length; i++) {
       friends.push(addressFormData.inputArray[i].name)
     }
+    // Only posting addressFormData for now
+    console.log('inside success function for ajax meet');
     $.ajax({
       type: 'POST',
       url: 'http://localhost:3000/meet',
@@ -158,6 +157,7 @@ var App = React.createClass({
       alert('Please fill out all fields ;)');
     }
 
+    console.log(userDataObj.userData);
     $.ajax({
       type: 'POST',
       url: 'http://localhost:3000/createuser',
@@ -227,6 +227,25 @@ var App = React.createClass({
     });
   },
 
+  grabCategories: function(e) {
+    if (e.target.checked){
+      let statecopy = this.state.categories;
+      statecopy.push(e.target.value);
+      return this.setState({
+        categories:statecopy
+      });
+    } else {
+      let temp = this.state.categories,
+      i = temp.indexOf(e.target.value);
+      temp.splice(i, 1);
+      return this.setState({
+        categories:temp
+      });
+    }
+    console.log(e.target.value);
+    console.log(e.target.checked);
+  },
+
   findDistance: function(i) {
     const userCoords = [];
     for(let i = 0; i < this.state.friends.length; i++) {
@@ -248,6 +267,7 @@ var App = React.createClass({
       url: 'http://localhost:3000/distance',
       data: object,
       success: function (response) {
+        console.log(response);
         this.setState({
           travelData: response
         });
