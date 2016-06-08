@@ -10,15 +10,12 @@ const AddressBook = React.createClass ({
      if(i === 0) {
        contactList.push(<p onClick={this.props.handleContactNameClick}>{this.props.contactNames[i]}</p>);
      } else {
-     contactList.push(<p onClick={this.props.handleContactNameClick}>{this.props.contactNames[i].name}</p>);
+       contactList.push(<p onClick={this.props.handleContactNameClick}>{this.props.contactNames[i].name}</p>);
     }
    }
    return (
      <div>
-     <h1> Contact List </h1>
-      <div >
-        {contactList}
-      </div>
+       {contactList}
      </div>
    );
  },
