@@ -27,6 +27,12 @@ var User = sequelize.define('users', {
       }
     }
   }
+//   { classMethods: {
+//     associate: function() {
+//       User.hasMany(Address);
+//     }
+//   }
+// }
 );
 
 var Address = sequelize.define('addresses', {
@@ -35,10 +41,10 @@ var Address = sequelize.define('addresses', {
   street: {type: Sequelize.STRING, allowNull: false},
   city: {type: Sequelize.STRING, allowNull: false},
   state: {type: Sequelize.STRING, allowNull: false},
-  // TODO:add a column for userID to store the link
+  username: {type: Sequelize.STRING, allowNull: false},
 });
 
-User.hasMany(Address, {foreignKey: '_id'});
+// User.belongsTo(Address);
 
 
 const databaseOps = {
@@ -78,6 +84,7 @@ const databaseOps = {
       } else if (!bcrypt.compareSync(req.body.userData.password, user.password)) {
         res.status(404).send({message: 'Incorrect password.'});
       } else {
+        res.cookie('username', req.body.userData.username);
         next();
       }
     });
@@ -95,11 +102,10 @@ const databaseOps = {
     let addressesTablePromise = Addresses.sync({ logging: console.log });
 
     addressesTablePromise.then(() => {
-      // Addresses.bulkCreate(addressData);
-      Addresses.create(req.body.addressData)
+      req.body.username = req.cookies.username;
+      Addresses.create(req.body)
       .then((databaseResponse) => {
         //when we get a response from the database we will pass that back to the front end to prove a successful database save
-        //TODO: add error handling
         req.body.databaseResponse = JSON.stringify(databaseResponse);
         next();
       }).catch(function(err) {
@@ -110,14 +116,16 @@ const databaseOps = {
   },
 
   getUserAddressBook: (req, res, next) => {
-    let Users = databaseOps.usersModel;
-    Users.findAll( {
-      include: [{
-        model: address
-      }]
+    let Address = databaseOps.addressesModel;
+    Address.findAll( {
+      where: {
+        username: req.cookies.username,
+      }
     } ).then(databaseResponse => {
-
-      req.body.databaseResponse = databaseResponse;
+      var addressObj = databaseResponse.map(instance => {
+        return instance.dataValues;
+      });
+      req.body.databaseResponse = addressObj;
       next();
     });
   }
