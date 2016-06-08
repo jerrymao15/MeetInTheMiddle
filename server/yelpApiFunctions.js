@@ -22,7 +22,7 @@ yelpApiFunctions.generateUrl = function(req, res, next) {
     sort: '0',
     category_filter: 'restaurants',
   };
-  //console.log(parameters);
+
 
   parameters.oauth_consumer_key = consumerKey;
   parameters.oauth_token = token;
@@ -42,7 +42,7 @@ yelpApiFunctions.generateUrl = function(req, res, next) {
 yelpApiFunctions.queryLocationData = function(req, res, next) {
   request(req.body.requestUrl, function (error, response, body) {
     const data = JSON.parse(body);
-    const RESULTS = 10;
+    const RESULTS = 2;
     req.body.businessArray = data.businesses.slice(0, RESULTS);
     next();
   })

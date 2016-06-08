@@ -86,6 +86,7 @@ var App = React.createClass({
       friends.push(addressFormData.inputArray[i].name)
     }
     // Only posting addressFormData for now
+    console.log('inside success function for ajax meet');
     $.ajax({
       type: 'POST',
       url: 'http://localhost:3000/meet',
@@ -220,7 +221,6 @@ var App = React.createClass({
       url: 'http://localhost:3000/addAddress',
       data: this.state.addAddress,
       success: function (response) {
-        console.log('add address successfully')
         this.state.addAddress = {};
       }.bind(this),
       error: function(err) {
