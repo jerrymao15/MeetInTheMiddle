@@ -1,6 +1,5 @@
 'use strict';
 const React = require('react');
-const ReactDom = require('react-dom');
 const ActivityChoice = require('./activityChoices.jsx');
 const AddressForm = require('./addressForm.jsx');
 const MapResults = require('./map.jsx');
@@ -8,15 +7,14 @@ const ResultList = require('./resultListItem.jsx');
 const SignUp = require('./SignUp.jsx');
 const UserLogin = require('./userLogin.jsx');
 const $ = require('jquery');
-const AddAddress = require('./AddAddress.jsx');
 import {ModalContainer, ModalDialog} from 'react-modal-dialog';
+const AddressBookContainer = require('./containers/AddressBookContainer.jsx')
 
 var App = React.createClass({
 
   getInitialState: function () {
     return ({
       travelData: [],
-      numberOfPeople: 2,
       currentPage: 'signUpPage',
       resultsData: '',
       username: '',
@@ -269,19 +267,21 @@ var App = React.createClass({
       var activityCheckboxes = this.addActivities();
       return (
         <div>
-          <AddAddress
-            handleAddAddress={this.handleAddAddress}
-            handleChangeAddName={this.handleChangeAddName}
-            handleChangeAddStreet={this.handleChangeAddStreet}
-            handleChangeAddCity={this.handleChangeAddCity}
-            handleChangeAddState={this.handleChangeAddState} />
-          {formFields}
+          <AddressForm id={0} />
           <button className="button-primary" onClick={this.addSingleForm}>Add Address</button>
+          <hr />
           <h4>Where do you want to meet?</h4>
           <div className="row">
             {activityCheckboxes}
           </div>
           <button className="button-primary" onClick={this.submitInputData}>Meet in the middle!</button>
+          <hr />
+          <AddressBookContainer
+            handleAddAddress={this.handleAddAddress}
+            handleChangeAddName={this.handleChangeAddName}
+            handleChangeAddStreet={this.handleChangeAddStreet}
+            handleChangeAddCity={this.handleChangeAddCity}
+            handleChangeAddState={this.handleChangeAddState} />
         </div>
       );
     }

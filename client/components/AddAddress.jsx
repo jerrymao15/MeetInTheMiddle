@@ -10,7 +10,6 @@ const AddAddress = ({
   handleChangeAddState,
 }) =>
   <div>
-    <h4>Add Address</h4>
     <form onSubmit={handleAddAddress}>
       <input type="text" onChange={handleChangeAddName} placeholder="Name"/>
       <input type="text" onChange={handleChangeAddStreet} placeholder="Street"/>
