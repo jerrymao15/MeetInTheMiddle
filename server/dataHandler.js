@@ -9,16 +9,9 @@ dataHandler.parseInput = function (req, res, next) {
   let baseUrl = 'https://maps.googleapis.com/maps/api/geocode/json?address=';
   let urlArray = [];
 
-
   for (let i = 0; i < req.body.inputArray.length; i++) {
     let url = baseUrl;
-    for (let key in req.body.inputArray[i]) {
-      if (key !== 'name') {
-        url += req.body.inputArray[i][key].replace(/ /g, '+');
-        if (key !== 'state') url += ',';
-      }
-    }
-    url += '&key' + googleApiKey;
+    url +=`${req.body.inputArray[i].street.trim().replace('/\s/g', '+')},${req.body.inputArray[i].city.trim().replace('/\s/g', '+')},${req.body.inputArray[i].state.trim().replace('/\s/g', '+')}`
     urlArray.push(url);
   }
 
