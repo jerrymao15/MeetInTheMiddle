@@ -15,6 +15,7 @@ var App = React.createClass({
   getInitialState: function () {
     return ({
       travelData: [],
+      categories:[],
       currentPage: 'signUpPage',
       resultsData: '',
       username: '',
@@ -25,7 +26,6 @@ var App = React.createClass({
         city: '',
         state: '',
       },
-      friendName: '',
     });
   },
 
@@ -44,10 +44,14 @@ var App = React.createClass({
   },
 
   addActivities: function () {
-    const activityTypes = ['Restaurant', 'Park', 'Movie Theater', 'Mall'];
+    const activityTypes = ['Restaurants', 'Active Life', 'Nightlife', 'Arts', 'Shopping'];
     let activitiesArray = [];
     for (let i = 0, len = activityTypes.length; i < len; i++) {
-      activitiesArray.push(<ActivityChoice activity={activityTypes[i]} />);
+      activitiesArray.push(<ActivityChoice
+        activity={activityTypes[i]}
+        key={i}
+        grabCategories={this.grabCategories}
+        />);
     }
     return activitiesArray;
   },
@@ -70,18 +74,11 @@ var App = React.createClass({
     return formDataArray;
   },
 
-  activityData: function () {
-    let checkedBoxes = $('input[name="activityBox"]:checked');
-    var checkedBoxesValues = [];
-    for (var i = 0; i < checkedBoxes.length; i++) {
-      checkedBoxesValues.push(checkedBoxes[i].value);
-    }
-    return checkedBoxesValues;
-  },
-
   submitInputData: function () {
-    let addressFormData = { inputArray: this.formData() };
-    let checkedActivities = this.activityData();
+    let addressFormData = {
+      inputArray: this.formData(),
+      categories: this.state.categories
+     };
     const friends = [];
     for (let i = 0; i < addressFormData.inputArray.length; i++) {
       friends.push(addressFormData.inputArray[i].name)
@@ -225,6 +222,23 @@ var App = React.createClass({
         console.log('error adding address to the database');
       },
     });
+  },
+
+  grabCategories: function(e) {
+    if (e.target.checked){
+      let statecopy = this.state.categories;
+      statecopy.push(e.target.value);
+      return this.setState({
+        categories:statecopy
+      });
+    } else {
+      let temp = this.state.categories,
+      i = temp.indexOf(e.target.value);
+      temp.splice(i, 1);
+      return this.setState({
+        categories:temp
+      });
+    }
   },
 
   findDistance: function(i) {

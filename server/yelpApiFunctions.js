@@ -20,10 +20,13 @@ yelpApiFunctions.generateUrl = function(req, res, next) {
     cll: req.body.averageLocation[0] + ',' + req.body.averageLocation[1],
     //For sort: 0 is best match (default), 1 is distance, 2 is higest rated
     sort: '0',
-    category_filter: 'restaurants',
   };
 
-
+  let cat = '';
+  req.body.categories.forEach(cata => {
+    cat += ',' + cata.toLowerCase().replace(/(\s.*)/, '');
+  })
+  parameters.category_filter = cat.replace(',', '');
   parameters.oauth_consumer_key = consumerKey;
   parameters.oauth_token = token;
   parameters.oauth_nonce = n();
