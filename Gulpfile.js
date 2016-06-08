@@ -4,6 +4,7 @@ var browserify = require('browserify');
 var watchify = require('watchify');
 var reactify = require('reactify');
 var nodemon = require('gulp-nodemon');
+const babelify = require('babelify');
 
 gulp.task('browserify', scripts)
     .task('serve', serve);
@@ -11,7 +12,7 @@ gulp.task('browserify', scripts)
 function scripts() {
   var bundler = browserify({
     entries: ['./client/index.jsx'],
-    transform: [reactify], // We want to convert JSX to normal javascript
+    transform: [babelify], // We want to convert JSX to normal javascript
     debug: true,
     cache: {},
     packageCache: {},

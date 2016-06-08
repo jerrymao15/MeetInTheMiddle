@@ -15,7 +15,7 @@ var App = React.createClass({
   getInitialState: function () {
     return ({
       numberOfPeople: 2,
-      currentPage: 'signUpPage',
+      currentPage: 'addressesPage',
       resultsData: '',
       username: '',
       password: '',
@@ -237,13 +237,10 @@ var App = React.createClass({
       temp.latitude = this.state.resultsData.userCoords.latitudes[i];
       userCoords.push(temp);
     }
-    console.log(i);
-    console.log(this.state.resultsData.meetSuggestions[i].location.coordinate);
     const obj = {
       yelp_coord: this.state.resultsData.meetSuggestions[i].location.coordinate,
       user_coords: userCoords
     }
-    console.log(obj);
     this.findDistanceAjax(obj)
   },
 
