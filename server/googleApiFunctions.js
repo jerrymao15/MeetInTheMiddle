@@ -61,7 +61,7 @@ googleApiFunctions.findCentralLocation = function(req, res, next) {
   request(url, function (error, response, body) {
     let data = JSON.parse(body);
     for (var i = 0; i < data.results[1].address_components.length; i++) {
-      if (data.results[1].address_components[i].types.indexOf('locality') !== -1) {
+      if (data.results[1].address_components[i].types.indexOf('neighborhood') !== -1) {
         req.body.city = data.results[1].address_components[i].long_name;
         continue;
       }
@@ -72,9 +72,9 @@ googleApiFunctions.findCentralLocation = function(req, res, next) {
 
 googleApiFunctions.findTravelTime = function(req, res, next) {
   const url1 = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=',
-  start = `${req.yelp_coord.latitude},${req.yelp_coord.longitude}`, //lat and longitude
-  destinations = '&destinations=',
-  googleApiKey = privateKeys.googleApiKey;
+  start = `${req.body.yelp_coord.latitude},${req.body.yelp_coord.longitude}`, //lat and longitude
+  googleApiKey = '&key='+privateKeys.googleApiKey;
+  let destinations = '&destinations=';
 
   req.body.user_coords.forEach(coord => {
     destinations += `|${coord.latitude},${coord.longitude}`
@@ -83,32 +83,19 @@ googleApiFunctions.findTravelTime = function(req, res, next) {
 
   const finalURL = url1+start+destinations+googleApiKey;
 
-
-  function distanceData(start) {
-    return new Promise((resolve, reject) => {
-      request(finalURL, (err, res, body) => {
-        if (err) reject(err);
-        resolve(JSON.parse(body));
-      })
-    })
-  }
-
-  distanceData.then(results => {
+  request(finalURL, (err, res, body) => {
+    if (err) console.log(err);
     const resultArr = [];
-    results.forEach(yelp => {
+    JSON.parse(body).rows[0].elements.forEach(yelp => {
       resultArr.push({
-        distance: yelp.elements[0].distance.text,
-        travelTime: yelp.elements[0].duration.text
+        distance: yelp.distance.text,
+        travelTime: yelp.duration.text
       })
     })
-  
     req.body.calculatedDistance = resultArr;
-    next()
-  })
-  .catch(err => {
-    console.log('Failed promise while parsing distance data');
     next();
   })
+
 }
 
 module.exports = googleApiFunctions;

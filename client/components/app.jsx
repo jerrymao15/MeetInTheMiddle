@@ -15,7 +15,7 @@ var App = React.createClass({
   getInitialState: function () {
     return ({
       numberOfPeople: 2,
-      currentPage: 'signUpPage',
+      currentPage: 'addressesPage',
       resultsData: '',
       username: '',
       password: '',
@@ -229,8 +229,33 @@ var App = React.createClass({
     });
   },
 
-  findDistance: function(e, i) {
-    console.log(e);
+  findDistance: function(i) {
+    const userCoords = [];
+    for(let i = 0; i < this.state.friends.length; i++) {
+      const temp = {};
+      temp.longitude = this.state.resultsData.userCoords.longitudes[i];
+      temp.latitude = this.state.resultsData.userCoords.latitudes[i];
+      userCoords.push(temp);
+    }
+    const obj = {
+      yelp_coord: this.state.resultsData.meetSuggestions[i].location.coordinate,
+      user_coords: userCoords
+    }
+    this.findDistanceAjax(obj)
+  },
+
+  findDistanceAjax: function(object) {
+    $.ajax({
+      type: 'POST',
+      url: 'http://localhost:3000/distance',
+      data: object,
+      success: function (response) {
+        console.log(response);
+      }.bind(this),
+      error: function(err) {
+        console.log('something fucked up');
+      }
+    });
   },
 
   render: function () {

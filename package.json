@@ -47,6 +47,7 @@
     "react": "^15.1.0",
     "react-dom": "^15.1.0",
     "react-leaflet": "^0.11.5",
+    "react-modal-dialog": "^3.0.1",
     "reactify": "^1.1.1",
     "request": "^2.72.0",
     "sequelize": "^3.23.3",
