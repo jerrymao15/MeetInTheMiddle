@@ -16,17 +16,19 @@ yelpApiFunctions.generateUrl = function(req, res, next) {
   const token = privateKeys.token, tokenSecret = privateKeys.tokenSecret;
 
   let parameters = {
-    location: req.body.city,
     cll: req.body.averageLocation[0] + ',' + req.body.averageLocation[1],
     //For sort: 0 is best match (default), 1 is distance, 2 is higest rated
     sort: '0',
   };
 
+  const coords = `${req.body.averageLocation[0]},${req.body.averageLocation[1]}`
   let cat = '';
+  //impliment defaults
   req.body.categories.forEach(cata => {
     cat += ',' + cata.toLowerCase().replace(/(\s.*)/, '');
-  })
+  });
   parameters.category_filter = cat.replace(',', '');
+  parameters.ll = coords;
   parameters.oauth_consumer_key = consumerKey;
   parameters.oauth_token = token;
   parameters.oauth_nonce = n();
@@ -36,6 +38,7 @@ yelpApiFunctions.generateUrl = function(req, res, next) {
   parameters.oauth_signature = oauthSignature.generate('GET', baseUrl, parameters, consumerSecret, tokenSecret, { encodeSignature: false});
 
   req.body.requestUrl = baseUrl + '?' + qs.stringify(parameters);
+  console.log(req.body.requestUrl);
 
   next();
 };
@@ -44,7 +47,6 @@ yelpApiFunctions.generateUrl = function(req, res, next) {
 //TODO: Modify API query to fallback to other types of search if no results
 yelpApiFunctions.queryLocationData = function(req, res, next) {
   request(req.body.requestUrl, function (error, response, body) {
-    if (error) return res.status(400).send(error);
     const data = JSON.parse(body);
     const RESULTS = 2;
     req.body.businessArray = data.businesses.slice(0, RESULTS);
