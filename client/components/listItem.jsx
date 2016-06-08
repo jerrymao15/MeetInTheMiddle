@@ -1,6 +1,7 @@
 'use strict'
 const React = require('react');
 import {ModalContainer, ModalDialog} from 'react-modal-dialog';
+import {Container} from 'rebass';
 
 
 
@@ -37,10 +38,12 @@ var ListItem = React.createClass({
   render: function() {
     return (
       <div className="four columns singleItem yelp" onClick={this.handleClick}>
+        <Container>
         <h5>{this.props.name}</h5>
         <p>Phone: {this.props.phone}</p>
         <img role="presentation" src={this.props.ratingImgURL} />
         <p>{this.props.text}</p>
+        </Container>
         {
           this.state.isShowingModal &&
           <ModalContainer onClose={this.handleClose}>

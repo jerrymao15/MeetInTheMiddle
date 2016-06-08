@@ -1,5 +1,6 @@
 const React = require('react');
 const ListItem = require('./listItem.jsx');
+import {Divider} from 'rebass'
 
 var ResultListItem = React.createClass({
 
@@ -26,6 +27,11 @@ var ResultListItem = React.createClass({
     var suggestionList = this.displayListItems();
     return (
       <div className="listItems">
+        <Divider />
+        <Divider
+          width={500}
+
+           />
         {suggestionList}
       </div>
     );
