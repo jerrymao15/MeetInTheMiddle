@@ -16,7 +16,7 @@ var App = React.createClass({
     return ({
       travelData: [],
       categories:[],
-      currentPage: 'signUpPage',
+      currentPage: 'addressesPage',
       resultsData: '',
       username: '',
       password: '',
@@ -76,7 +76,7 @@ var App = React.createClass({
 
   submitInputData: function () {
     let addressFormData = {
-      inputArray: this.formData(),
+      inputArray: this.getFormData(),
       categories: this.state.categories
      };
     const friends = [];
