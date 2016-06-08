@@ -44,7 +44,6 @@ yelpApiFunctions.queryLocationData = function(req, res, next) {
     const data = JSON.parse(body);
     const RESULTS = 10;
     req.body.businessArray = data.businesses.slice(0, RESULTS);
-    console.log(req.body.businessArray);
     next();
   })
 };

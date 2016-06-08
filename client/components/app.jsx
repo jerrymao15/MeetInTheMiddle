@@ -15,7 +15,7 @@ var App = React.createClass({
   getInitialState: function () {
     return ({
       numberOfPeople: 2,
-      currentPage: 'signUpPage',
+      currentPage: 'addressesPage',
       resultsData: '',
       username: '',
       password: '',
@@ -226,6 +226,11 @@ var App = React.createClass({
       },
     });
   },
+
+  findDistance: function(e, i) {
+    console.log(e);
+  },
+
   render: function () {
     if (this.state.currentPage === 'addressesPage') {
       var formFields = this.addForms();
@@ -253,7 +258,7 @@ var App = React.createClass({
       return (
         <div>
           <MapResults data={this.state.resultsData} />
-          <ResultList data={this.state.resultsData} />
+          <ResultList data={this.state.resultsData} findDistance={this.findDistance} />
         </div>
       );
     }
