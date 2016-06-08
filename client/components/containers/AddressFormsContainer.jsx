@@ -8,7 +8,6 @@ const AddressFormsContainer = ({
   onCityChange,
   onStateChange,
 }) => {
-  console.log(formValuesArr)
   return (
     <div>
       {formValuesArr.map((formValues, i) =>
