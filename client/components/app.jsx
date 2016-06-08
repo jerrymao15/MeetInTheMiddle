@@ -9,13 +9,14 @@ const SignUp = require('./SignUp.jsx');
 const UserLogin = require('./userLogin.jsx');
 const $ = require('jquery');
 const AddAddress = require('./AddAddress.jsx');
+const AddressBook = require('./AddressBook.jsx');
 
 var App = React.createClass({
 
   getInitialState: function () {
     return ({
       numberOfPeople: 2,
-      currentPage: 'addressesPage',
+      currentPage: 'signUpPage',
       resultsData: '',
       username: '',
       password: '',
@@ -25,6 +26,7 @@ var App = React.createClass({
         city: '',
         state: '',
       },
+      friendName: '',
     });
   },
 
@@ -117,6 +119,7 @@ var App = React.createClass({
       url: 'http://localhost:3000/login',
       data: userDataObj,
       success: function (response) {
+        console.log(response);
         this.setState({
           currentPage: 'addressesPage',
         });
@@ -221,6 +224,7 @@ var App = React.createClass({
       url: 'http://localhost:3000/addAddress',
       data: this.state.addAddress,
       success: function (response) {
+        console.log(response);
         this.state.addAddress = {};
       }.bind(this),
       error: function(err) {
@@ -277,6 +281,7 @@ var App = React.createClass({
             {activityCheckboxes}
           </div>
           <button className="button-primary" onClick={this.submitInputData}>Meet in the middle!</button>
+          <AddressBook />
         </div>
       );
     }
