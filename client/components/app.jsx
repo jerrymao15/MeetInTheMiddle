@@ -15,7 +15,7 @@ var App = React.createClass({
   getInitialState: function () {
     return ({
       numberOfPeople: 2,
-      currentPage: 'addressesPage',
+      currentPage: 'signUpPage',
       resultsData: '',
       username: '',
       password: '',
