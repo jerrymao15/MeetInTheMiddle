@@ -86,6 +86,7 @@ var App = React.createClass({
       friends.push(addressFormData.inputArray[i].name)
     }
     // Only posting addressFormData for now
+    console.log('inside success function for ajax meet');
     $.ajax({
       type: 'POST',
       url: 'http://localhost:3000/meet',
@@ -137,8 +138,8 @@ var App = React.createClass({
   userData: function() {
     var firstNameId = 'form #firstName';
     var lastNameId = 'form #lastName';
-    var usernameId = 'form #username';
-    var passwordId = 'form #password';
+    var usernameId = 'form #signup-username';
+    var passwordId = 'form #signup-password';
     let userData = {};
     userData.firstname = $(firstNameId).val();
     userData.lastname = $(lastNameId).val();
@@ -147,16 +148,18 @@ var App = React.createClass({
     return userData;
   },
 
-  signUpUser: function () {
+  signUpUser: function (e) {
+    e.preventDefault();
     var userDataObj = { userData: this.userData() };
 
     if (userDataObj.userData.firstname === '' ||
     userDataObj.userData.lastname === '' ||
     userDataObj.userData.password === '' ||
     userDataObj.userData.username === '') {
-      return alert('Please fill out all fields ;)');
+      alert('Please fill out all fields ;)');
     }
 
+    console.log(userDataObj.userData);
     $.ajax({
       type: 'POST',
       url: 'http://localhost:3000/createuser',
@@ -218,7 +221,6 @@ var App = React.createClass({
       url: 'http://localhost:3000/addAddress',
       data: this.state.addAddress,
       success: function (response) {
-        console.log('add address successfully')
         this.state.addAddress = {};
       }.bind(this),
       error: function(err) {
@@ -301,8 +303,7 @@ var App = React.createClass({
             handleUserChange={this.handleUserChange}
             handlePasswordChange={this.handlePasswordChange}
             />
-          <SignUp />
-          <button className="button-primary" >Sign Up</button>
+          <SignUp onSubmit={this.signUpUser} />
         </div>
       );
     }

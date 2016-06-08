@@ -13,9 +13,7 @@ const sequelize = new Sequelize(privateKeys.postgresURI, {
   dialect: 'postgres',
 });
 
-const databaseOps = {
-  // sets up the user model in the database
-  usersModel: sequelize.define('users', {
+var User = sequelize.define('users', {
     _id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
     firstname: {type: Sequelize.STRING, allowNull: false},
     lastname: {type: Sequelize.STRING, allowNull: false},
@@ -24,11 +22,31 @@ const databaseOps = {
   },
   //set up the hook (like when we authenticated in mongo using pre 'save') to bcrypt the password before every user is made;
   { hooks: {
-    beforeCreate: (user) => {
-      user.password = bcrypt.hashSync(user.password, SALT_VALUE);
+      beforeCreate: (user) => {
+        user.password = bcrypt.hashSync(user.password, SALT_VALUE);
       }
-    },
-  }),
+    }
+  }
+);
+
+var Address = sequelize.define('addresses', {
+  _id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
+  name: {type: Sequelize.STRING, allowNull: false},
+  street: {type: Sequelize.STRING, allowNull: false},
+  city: {type: Sequelize.STRING, allowNull: false},
+  state: {type: Sequelize.STRING, allowNull: false},
+  // TODO:add a column for userID to store the link
+});
+
+User.hasMany(Address, {foreignKey: '_id'});
+
+
+const databaseOps = {
+  // reference to user model
+  usersModel: User,
+
+  // reference to address model
+  addressesModel: Address,
 
   // creates a user in the database
   createUser: (req, res, next) => {
@@ -56,25 +74,15 @@ const databaseOps = {
     let Users = databaseOps.usersModel;
     Users.findOne({ where: {username: req.body.userData.username} }).then(function(user) {
       if (!user) {
-        req.body.databaseResponse = {message: 'Incorrect username.'};
+        res.status(404).send({message: 'Incorrect username.'});
+      } else if (!bcrypt.compareSync(req.body.userData.password, user.password)) {
+        res.status(404).send({message: 'Incorrect password.'});
+      } else {
+        next();
       }
-      if (!bcrypt.compareSync(req.body.userData.password, user.password)) {
-        req.body.databaseResponse = {message: 'Incorrect password.'};
-      }
-      next();
     });
   },
-// sets up the address model for the database
-  addressesModel: sequelize.define('addresses', {
-    _id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
-    name: {type: Sequelize.STRING, allowNull: false},
-    street: {type: Sequelize.STRING, allowNull: false},
-    city: {type: Sequelize.STRING, allowNull: false},
-    state: {type: Sequelize.STRING, allowNull: false},
-    // TODO:add a column for userID to store the link
-  }),
 
-  // usersModel.belongsTo(addressesModel);
   // addressData is passed via the request body
   createAddress: (req, res, next) => {
     let Addresses = databaseOps.addressesModel;
@@ -88,7 +96,7 @@ const databaseOps = {
 
     addressesTablePromise.then(() => {
       // Addresses.bulkCreate(addressData);
-      Addresses.bulkCreate(req.body.addressData)
+      Addresses.create(req.body.addressData)
       .then((databaseResponse) => {
         //when we get a response from the database we will pass that back to the front end to prove a successful database save
         //TODO: add error handling
@@ -100,6 +108,19 @@ const databaseOps = {
       });;
     });
   },
+
+  getUserAddressBook: (req, res, next) => {
+    let Users = databaseOps.usersModel;
+    Users.findAll( {
+      include: [{
+        model: address
+      }]
+    } ).then(databaseResponse => {
+
+      req.body.databaseResponse = databaseResponse;
+      next();
+    });
+  }
 };
 
 module.exports = databaseOps;

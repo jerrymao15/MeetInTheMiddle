@@ -61,7 +61,7 @@ googleApiFunctions.findCentralLocation = function(req, res, next) {
   request(url, function (error, response, body) {
     let data = JSON.parse(body);
     for (var i = 0; i < data.results[1].address_components.length; i++) {
-      if (data.results[1].address_components[i].types.indexOf('neighborhood') !== -1) {
+      if (data.results[1].address_components[i].types.indexOf('locality') !== -1) {
         req.body.city = data.results[1].address_components[i].long_name;
         continue;
       }
@@ -82,7 +82,7 @@ googleApiFunctions.findTravelTime = function(req, res, next) {
   destinations = destinations.replace('|', '');
 
   const finalURL = url1+start+destinations+googleApiKey;
-  console.log(finalURL, 'string');
+
 
   function distanceData(start) {
     return new Promise((resolve, reject) => {
@@ -102,6 +102,10 @@ googleApiFunctions.findTravelTime = function(req, res, next) {
         travelTime: yelp.duration.text
       })
     })
+<<<<<<< HEAD
+=======
+  
+>>>>>>> 12d4833e988430de002840019dd8da7110d06c94
     req.body.calculatedDistance = resultArr;
     next()
   })

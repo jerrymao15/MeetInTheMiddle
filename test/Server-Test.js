@@ -7,19 +7,12 @@ import databaseOps from './../db/database';
 
 
 
-describe('description here', function() {
+describe('Server Test', function() {
   before(function() {
     const Users = databaseOps.usersModel;
   })
 
-  // afterEach(function(done) {
-  //   Users.findOne({where: {username: 'i'}})
-  //   .then(function(user) {
-  //     return user.destroy();
-  //   })
-  // })
-
-  it('should sign u up fam', function(done) {
+  xit('should sign u up fam', function(done) {
     request
       .post('/createuser')
       .send({userData: {

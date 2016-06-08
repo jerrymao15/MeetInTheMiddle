@@ -35,6 +35,7 @@ dataHandler.sendOutput = function (req, res, next) {
     meetSuggestions: req.body.businessArray,
     userCoords: req.body.coordinateData
   }
+
   res.send(outputObject);
 }
 

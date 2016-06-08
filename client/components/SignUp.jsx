@@ -5,7 +5,7 @@ var SignUp = React.createClass({
 
   render: function () {
     return (
-      <form>
+      <form onSubmit={this.props.onSubmit}>
         <div className="row">
           <div className="three columns">
             <label htmlFor="firstName">First Name:</label>
@@ -19,14 +19,15 @@ var SignUp = React.createClass({
 
           <div className="three columns">
             <label htmlFor="username">Username:</label>
-            <input type="text" id="username" />
+            <input type="text" id="signup-username" />
           </div>
 
           <div className="three columns">
             <label htmlFor="password">Password:</label>
-            <input type="password" id="password" />
+            <input type="password" id="signup-password" />
           </div>
         </div>
+        <button className="button-primary" >Sign Up</button>
       </form>
     );
   },

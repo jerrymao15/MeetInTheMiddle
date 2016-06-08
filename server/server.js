@@ -30,19 +30,25 @@ app.post('/addAddress', databaseOps.createAddress, (req, res) => {
 	res.send(req.body.databaseResponse);
 })
 
-app.post('/meet', dataHandler.parseInput, googleApiFunctions.getCoordinates,
-    googleApiFunctions.findCentralLocation, yelpApiFunctions.generateUrl,
-    yelpApiFunctions.queryLocationData, dataHandler.sendOutput);
+app.post('/meet',
+  dataHandler.parseInput,
+  googleApiFunctions.getCoordinates,
+  googleApiFunctions.findCentralLocation,
+  yelpApiFunctions.generateUrl,
+  yelpApiFunctions.queryLocationData,
+  dataHandler.sendOutput);
 
 app.post('/createuser', databaseOps.createUser, (req, res) => {
 	if (req.body.databaseResponse.hasOwnProperty('errors')) return res.status(404).end();
 	res.send(req.body.databaseResponse);
 });
 
-app.post('/login', databaseOps.verifyUser, (req, res) => {
-  if (req.body.databaseResponse) return res.status(404).send(req.body.databaseResponse);
-  return res.status(200).end();
-})
+app.post('/login',
+  databaseOps.verifyUser,
+  // databaseOps.getUserAddressBook,
+  (req, res) => {
+    res.send(req.body.databaseResponse);
+  });
 
 app.post('/distance', googleApiFunctions.findTravelTime, (req, res) => {
   return res.send(req.body.calculatedDistance);
