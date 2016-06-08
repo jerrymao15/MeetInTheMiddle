@@ -238,7 +238,13 @@ var App = React.createClass({
       url: 'http://localhost:3000/addAddress',
       data: this.state.addAddress,
       success: function (response) {
-        this.state.addAddress = {};
+        const parsedRes = JSON.parse(response);
+        const newContacts = this.state.contacts;
+        newContacts.push(parsedRes);
+        this.setState({
+          addAddress: {},
+          contacts: newContacts,
+        });
       }.bind(this),
       error: function(err) {
         console.log('error adding address to the database');
@@ -340,6 +346,7 @@ var App = React.createClass({
     if (this.state.currentPage === 'addressesPage') {
       return (
         <div>
+          <h4>Who do you want to meet?</h4>
           <AddressFormsContainer
             onClose={this.handleOnClose}
             formValuesArr={this.state.sourceAddressArr}
