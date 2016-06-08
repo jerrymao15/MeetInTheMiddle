@@ -12,12 +12,15 @@ const googleApiFunctions = require('./googleApiFunctions');
 const yelpApiFunctions = require('./yelpApiFunctions');
 const databaseOps = require('./../db/database');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 
 let app = express();
 
 app.use(express.static(__dirname + './../client/'));
+app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
+
 
 app.get('/', function (req, res) {
   res.sendFile(path.resolve('./index.html'));
@@ -27,7 +30,7 @@ app.get('/', function (req, res) {
 //route should be consolidated with helper functions
 app.post('/addAddress', databaseOps.createAddress, (req, res) => {
 	if (req.body.databaseResponse.hasOwnProperty('errors')) return res.status(404).end();
-	res.send(req.body.databaseResponse);
+  res.send(req.body.databaseResponse);
 })
 
 app.post('/meet',
@@ -40,13 +43,15 @@ app.post('/meet',
 
 app.post('/createuser', databaseOps.createUser, (req, res) => {
 	if (req.body.databaseResponse.hasOwnProperty('errors')) return res.status(404).end();
+  res.cookie('username', req.body.databaseResponse.userData.username);
 	res.send(req.body.databaseResponse);
 });
 
 app.post('/login',
   databaseOps.verifyUser,
-  // databaseOps.getUserAddressBook,
+  databaseOps.getUserAddressBook,
   (req, res) => {
+    console.log('req body db response', req.body.databaseResponse);
     res.send(req.body.databaseResponse);
   });
 
