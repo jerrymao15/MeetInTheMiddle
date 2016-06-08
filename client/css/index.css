@@ -425,7 +425,10 @@ there.
 /* Larger than Desktop HD */
 @media (min-width: 1200px) {}
 
-
+.xout {
+  margin-top:27px;
+  margin-left: 80px;
+}
 
 .yelp {
   cursor:pointer;

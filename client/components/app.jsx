@@ -15,6 +15,7 @@ var App = React.createClass({
 
   getInitialState: function () {
     return ({
+      numberOfPeople: 2,
       travelData: [],
       categories:[],
       currentPage: 'signUpPage',
@@ -32,6 +33,7 @@ var App = React.createClass({
       friends: [],
     });
   },
+
   addActivities: function () {
     const activityTypes = ['Restaurants', 'Active Life', 'Nightlife', 'Arts', 'Shopping'];
     let activitiesArray = [];
@@ -217,6 +219,18 @@ var App = React.createClass({
       }
     }
   },
+
+  handleOnClose: function(i, e) {
+    console.log(i);
+    console.log(e);
+    e.preventDefault();
+    let copy = this.state.sourceAddressArr;
+    copy.splice(i, 1);
+    return this.setState({
+      sourceAddressArr:copy
+    });
+  },
+
   handleAddAddress: function(e) {
     e.preventDefault();
     $.ajax({
@@ -334,6 +348,7 @@ var App = React.createClass({
         <div>
           <h4>Who do you want to meet?</h4>
           <AddressFormsContainer
+            onClose={this.handleOnClose}
             formValuesArr={this.state.sourceAddressArr}
             onNameChange={this.handleAddressFormNameChange}
             onStreetChange={this.handleAddressFormStreetChange}

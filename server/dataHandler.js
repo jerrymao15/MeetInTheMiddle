@@ -15,6 +15,7 @@ dataHandler.parseInput = function (req, res, next) {
     urlArray.push(url);
   }
 
+
   req.body.inputUrlArray = urlArray;
   next();
 };
