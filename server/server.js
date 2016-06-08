@@ -42,8 +42,8 @@ app.post('/meet',
   dataHandler.sendOutput);
 
 app.post('/createuser', databaseOps.createUser, (req, res) => {
+  console.log(req.body.databaseResponse);
 	if (req.body.databaseResponse.hasOwnProperty('errors')) return res.status(404).end();
-  res.cookie('username', req.body.databaseResponse.userData.username);
 	res.send(req.body.databaseResponse);
 });
 
@@ -57,6 +57,11 @@ app.post('/login',
 app.post('/distance', googleApiFunctions.findTravelTime, (req, res) => {
   return res.send(req.body.calculatedDistance);
 });
+
+app.get('/login', (req, res) => {
+  res.clearCookie('username');
+  res.redirect('/');
+})
 
 app.listen(3000);
 

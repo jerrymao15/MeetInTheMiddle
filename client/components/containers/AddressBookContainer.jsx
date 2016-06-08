@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { ModalContainer, ModalDialog } from 'react-modal-dialog';
 import AddAddress from '../AddAddress.jsx';
+import AddressBook from '../addressBook.jsx'
 
 class AddressBookContainer extends Component {
   constructor(props) {
@@ -38,6 +39,7 @@ class AddressBookContainer extends Component {
         <div style={{display: 'inline-block'}}>
           <h4>Address Book</h4>
           <button onClick={this.handleOpenModal}>Add</button>
+          <AddressBook />
         </div>
         {
           this.state.isShowingModal &&
