@@ -27,6 +27,8 @@ var App = React.createClass({
         city: '',
         state: '',
       },
+      contacts: ['Add Custom Address'],
+      friends: [],
     });
   },
 
@@ -118,8 +120,13 @@ var App = React.createClass({
       url: 'http://localhost:3000/login',
       data: userDataObj,
       success: function (response) {
+        //loop through array and access each objet at its property name 'name'
+        // this.state.sourceAddressArr.concat(response);
+        var responseArr = this.state.contacts.concat(response);
+        console.log(responseArr)
         this.setState({
           currentPage: 'addressesPage',
+          contacts: responseArr,
         });
       }.bind(this),
       error: function(err) {
@@ -213,6 +220,25 @@ var App = React.createClass({
         state: e.target.value,
       },
     });
+  },
+  handleContactNameClick: function(e) {
+    e.preventDefault();
+    console.log(e.target.innerHTML);
+    var clickedName = e.target.innerHTML;
+    //setstate for the source address
+    for (let i = 0; i < this.state.contacts; i++) {
+      //find the object with given name from e.targeet html
+      for(var key in this.state.contacts[i]) {
+        //append found object to source address THING!
+        if (this.state.contacts[i][key] === clickedName) {
+          this.setstate({sourceAddressArr.push(this.state.contacts[i])});
+          break;
+        }
+      }
+    }
+
+
+
   },
   handleAddAddress: function(e) {
     e.preventDefault();
@@ -310,6 +336,8 @@ var App = React.createClass({
 
           <hr />
           <AddressBookContainer
+            contactNames={this.state.contacts}
+            handleContactNameClick={this.handleContactNameClick}
             handleAddAddress={this.handleAddAddress}
             handleChangeAddName={this.handleChangeAddName}
             handleChangeAddStreet={this.handleChangeAddStreet}

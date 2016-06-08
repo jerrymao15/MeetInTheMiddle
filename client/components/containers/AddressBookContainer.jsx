@@ -39,7 +39,10 @@ class AddressBookContainer extends Component {
         <div style={{display: 'inline-block'}}>
           <h4>Address Book</h4>
           <button onClick={this.handleOpenModal}>Add</button>
-          <AddressBook />
+          <AddressBook
+          contactNames={this.props.contactNames}
+          handleContactNameClick={this.props.handleContactNameClick}
+          />
         </div>
         {
           this.state.isShowingModal &&
