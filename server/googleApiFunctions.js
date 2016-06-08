@@ -36,8 +36,8 @@ googleApiFunctions.getCoordinates = function(req, res, next) {
       next();
     })
     .catch(err => {
+      res.status(404).send(err);
       console.log('Failed promise somewhere');
-      next();
     })
 };
 
@@ -59,9 +59,13 @@ googleApiFunctions.findCentralLocation = function(req, res, next) {
 
   const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${req.body.averageLocation[0]},${req.body.averageLocation[1]}&key=${googleApiKey}`;
   request(url, function (error, response, body) {
+    if (error) {
+      console.log('error finding central location');
+      return res.status(404).send(error);
+    }
     let data = JSON.parse(body);
     for (var i = 0; i < data.results[1].address_components.length; i++) {
-      if (data.results[1].address_components[i].types.indexOf('neighborhood') !== -1) {
+      if (data.results[1].address_components[i].types.indexOf('locality') !== -1) {
         req.body.city = data.results[1].address_components[i].long_name;
         continue;
       }
@@ -84,7 +88,10 @@ googleApiFunctions.findTravelTime = function(req, res, next) {
   const finalURL = url1+start+destinations+googleApiKey;
 
   request(finalURL, (err, res, body) => {
-    if (err) console.log(err);
+    if (err) {
+      console.log('error finding travel time');
+      return res.status(404).send(err);
+    }
     const resultArr = [];
     JSON.parse(body).rows[0].elements.forEach(yelp => {
       resultArr.push({

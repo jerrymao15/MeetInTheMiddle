@@ -6,7 +6,6 @@ var AddressForm = React.createClass({
   render: function () {
     return (
       <div className="row">
-        <h4>Source Addresses</h4>
         <form>
           <div className="two columns">
             <label htmlFor={"friend" + this.props.id}>Name:</label>
