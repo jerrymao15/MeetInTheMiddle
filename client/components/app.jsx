@@ -158,7 +158,6 @@ var App = React.createClass({
     userDataObj.userData.username === '') {
       alert('Please fill out all fields ;)');
     }
-
     $.ajax({
       type: 'POST',
       url: 'http://localhost:3000/createuser',
@@ -173,6 +172,7 @@ var App = React.createClass({
       }
     });
   },
+
   handleChangeAddName: function(e) {
     this.setState({
       addAddress: {
@@ -220,6 +220,7 @@ var App = React.createClass({
       url: 'http://localhost:3000/addAddress',
       data: this.state.addAddress,
       success: function (response) {
+        console.log(response);
         this.state.addAddress = {};
       }.bind(this),
       error: function(err) {
@@ -276,6 +277,21 @@ var App = React.createClass({
     });
   },
 
+  logout: function() {
+    $.ajax({
+      type: 'GET',
+      url: 'http://localhost:3000/login',
+      success: function () {
+        this.setState({
+          currentPage: 'signUpPage',
+        });
+      }.bind(this),
+      error: function(err) {
+        console.log('logout error: ', err);
+      }
+    });
+  },
+
   render: function () {
     if (this.state.currentPage === 'addressesPage') {
       return (
@@ -290,6 +306,7 @@ var App = React.createClass({
             {this.addActivities()}
           </div>
           <button className="button-primary" onClick={this.submitInputData}>Meet in the middle!</button>
+
           <hr />
           <AddressBookContainer
             handleAddAddress={this.handleAddAddress}
@@ -297,6 +314,7 @@ var App = React.createClass({
             handleChangeAddStreet={this.handleChangeAddStreet}
             handleChangeAddCity={this.handleChangeAddCity}
             handleChangeAddState={this.handleChangeAddState} />
+          <button className='button-primary' onClick={this.logout}>Logout</button>
         </div>
       );
     }

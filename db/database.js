@@ -20,7 +20,7 @@ var User = sequelize.define('users', {
     username: {type: Sequelize.STRING, allowNull: false, unique: true, validate: {notEmpty: true}},
     password: {type: Sequelize.STRING, allowNull: false, validate: {notEmpty: true}},
   },
-  //set up the hook (like when we authenticated in mongo using pre 'save') to bcrypt the password before every user is made;
+  //hook to bcrypt password
   { hooks: {
       beforeCreate: (user) => {
         user.password = bcrypt.hashSync(user.password, SALT_VALUE);
@@ -37,9 +37,6 @@ var Address = sequelize.define('addresses', {
   state: {type: Sequelize.STRING, allowNull: false},
   username: {type: Sequelize.STRING, allowNull: false},
 });
-
-// User.belongsTo(Address);
-
 
 const databaseOps = {
   // reference to user model
@@ -59,6 +56,7 @@ const databaseOps = {
       .then((databaseResponse) => {
         //when we get a response from the database we will pass that back to the front end to prove a successful database save
         //TODO: add error handling
+        res.cookie('username', req.body.userData.username);
         req.body.databaseResponse = JSON.stringify(databaseResponse);
         next();
       }).catch(function(err) {
@@ -67,10 +65,10 @@ const databaseOps = {
       });
     });
   },
-  //TODO: write the function to receive the user input from the login screen and compare against the password and username stored in the database
+
+
   verifyUser: (req, res, next) => {
     // user login verification details will come in on the req body
-    // think about bcrypt.compareSync(myPlaintextPassword, hash); // true
     let Users = databaseOps.usersModel;
     Users.findOne({ where: {username: req.body.userData.username} }).then(function(user) {
       if (!user) {
@@ -87,10 +85,6 @@ const databaseOps = {
   // addressData is passed via the request body
   createAddress: (req, res, next) => {
     let Addresses = databaseOps.addressesModel;
-
-    //set up that one user can have multiple addresses
-    // TODO: Need to add an element to the client that identified the user
-    //Addresses.belongsTo(databaseOps.usersModel);
 
     //establishes connection with database and prepare to add new addresses
     let addressesTablePromise = Addresses.sync({ logging: console.log });
