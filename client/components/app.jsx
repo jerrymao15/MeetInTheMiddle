@@ -15,6 +15,7 @@ var App = React.createClass({
   getInitialState: function () {
     return ({
       travelData: [],
+      categories:[],
       currentPage: 'signUpPage',
       resultsData: '',
       username: '',
@@ -25,7 +26,6 @@ var App = React.createClass({
         city: '',
         state: '',
       },
-      friendName: '',
     });
   },
 
@@ -44,18 +44,22 @@ var App = React.createClass({
   },
 
   addActivities: function () {
-    const activityTypes = ['Restaurant', 'Park', 'Movie Theater', 'Mall'];
+    const activityTypes = ['Restaurants', 'Active Life', 'Nightlife', 'Arts', 'Shopping'];
     let activitiesArray = [];
     for (let i = 0, len = activityTypes.length; i < len; i++) {
-      activitiesArray.push(<ActivityChoice activity={activityTypes[i]} />);
+      activitiesArray.push(<ActivityChoice
+        activity={activityTypes[i]}
+        key={i}
+        grabCategories={this.grabCategories}
+        />);
     }
     return activitiesArray;
   },
 
-  formData: function() {
+  getFormData: function() {
     // submiting ALL form data not just first one
     let formDataArray = [];
-    for (let i = 0; i < this.state.numberOfPeople; i++) {
+    for (let i = 0; i < 2; i++) {
       var friendId = 'form #friend' + i;
       var streetId = 'form #street' + i;
       var cityId = 'form #city' + i;
@@ -70,22 +74,16 @@ var App = React.createClass({
     return formDataArray;
   },
 
-  activityData: function () {
-    let checkedBoxes = $('input[name="activityBox"]:checked');
-    var checkedBoxesValues = [];
-    for (var i = 0; i < checkedBoxes.length; i++) {
-      checkedBoxesValues.push(checkedBoxes[i].value);
-    }
-    return checkedBoxesValues;
-  },
-
   submitInputData: function () {
-    let addressFormData = { inputArray: this.formData() };
-    let checkedActivities = this.activityData();
+    let addressFormData = {
+      inputArray: this.formData(),
+      categories: this.state.categories
+     };
     const friends = [];
     for (let i = 0; i < addressFormData.inputArray.length; i++) {
       friends.push(addressFormData.inputArray[i].name)
     }
+    console.log('submit input data', addressFormData);
     $.ajax({
       type: 'POST',
       url: 'http://localhost:3000/meet',
@@ -98,6 +96,9 @@ var App = React.createClass({
           currentPage: 'resultsPage',
         });
       }.bind(this),
+      error: function(err) {
+        console.log('error processing input data', err);
+      }
     });
   },
   //userlogin for all these handlers below (3)
@@ -157,7 +158,6 @@ var App = React.createClass({
     userDataObj.userData.username === '') {
       alert('Please fill out all fields ;)');
     }
-
     $.ajax({
       type: 'POST',
       url: 'http://localhost:3000/createuser',
@@ -172,6 +172,7 @@ var App = React.createClass({
       }
     });
   },
+
   handleChangeAddName: function(e) {
     this.setState({
       addAddress: {
@@ -219,12 +220,30 @@ var App = React.createClass({
       url: 'http://localhost:3000/addAddress',
       data: this.state.addAddress,
       success: function (response) {
+        console.log(response);
         this.state.addAddress = {};
       }.bind(this),
       error: function(err) {
         console.log('error adding address to the database');
       },
     });
+  },
+
+  grabCategories: function(e) {
+    if (e.target.checked){
+      let statecopy = this.state.categories;
+      statecopy.push(e.target.value);
+      return this.setState({
+        categories:statecopy
+      });
+    } else {
+      let temp = this.state.categories,
+      i = temp.indexOf(e.target.value);
+      temp.splice(i, 1);
+      return this.setState({
+        categories:temp
+      });
+    }
   },
 
   findDistance: function(i) {
@@ -258,20 +277,36 @@ var App = React.createClass({
     });
   },
 
+  logout: function() {
+    $.ajax({
+      type: 'GET',
+      url: 'http://localhost:3000/login',
+      success: function () {
+        this.setState({
+          currentPage: 'signUpPage',
+        });
+      }.bind(this),
+      error: function(err) {
+        console.log('logout error: ', err);
+      }
+    });
+  },
+
   render: function () {
     if (this.state.currentPage === 'addressesPage') {
-      var formFields = this.addForms();
-      var activityCheckboxes = this.addActivities();
       return (
         <div>
+          <h4>Source Addresses</h4>
           <AddressForm id={0} />
+          <AddressForm id={1} />
           <button className="button-primary" onClick={this.addSingleForm}>Add Address</button>
           <hr />
           <h4>Where do you want to meet?</h4>
           <div className="row">
-            {activityCheckboxes}
+            {this.addActivities()}
           </div>
           <button className="button-primary" onClick={this.submitInputData}>Meet in the middle!</button>
+
           <hr />
           <AddressBookContainer
             handleAddAddress={this.handleAddAddress}
@@ -279,6 +314,7 @@ var App = React.createClass({
             handleChangeAddStreet={this.handleChangeAddStreet}
             handleChangeAddCity={this.handleChangeAddCity}
             handleChangeAddState={this.handleChangeAddState} />
+          <button className='button-primary' onClick={this.logout}>Logout</button>
         </div>
       );
     }
