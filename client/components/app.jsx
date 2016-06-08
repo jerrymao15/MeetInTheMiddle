@@ -206,6 +206,18 @@ var App = React.createClass({
   handleContactNameClick: function(e) {
     e.preventDefault();
     var clickedName = e.target.innerHTML;
+    if (clickedName === 'Add Custom Address') {
+      const newSourceAddressArr = this.state.sourceAddressArr.slice();
+      newSourceAddressArr.push({
+        name: '',
+        street: '',
+        city: '',
+        state: '',
+      });
+      return this.setState({
+        sourceAddressArr: newSourceAddressArr,
+      });
+    }
     //setstate for the source address
     for (let i = 0; i < this.state.contacts.length; i++) {
       //find the object with given name from e.targeet html
