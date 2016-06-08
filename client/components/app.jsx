@@ -76,10 +76,9 @@ var App = React.createClass({
   },
 
   submitInputData: function () {
-    const that = this;
     let addressFormData = {
-      inputArray: that.getFormData(),
-      categories: that.state.categories
+      inputArray: this.getFormData(),
+      categories: this.state.categories
      };
     const friends = [];
     for (let i = 0; i < addressFormData.inputArray.length; i++) {
