@@ -14,6 +14,7 @@ var App = React.createClass({
 
   getInitialState: function () {
     return ({
+      numberOfPeople: 2,
       travelData: [],
       categories:[],
       currentPage: 'addressesPage',
