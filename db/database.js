@@ -116,7 +116,7 @@ const databaseOps = {
         model: address
       }]
     } ).then(databaseResponse => {
-      console.log(databaseResponse);
+
       req.body.databaseResponse = databaseResponse;
       next();
     });

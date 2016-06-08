@@ -8,7 +8,7 @@ var nodemon = require('gulp-nodemon');
 gulp.task('browserify', scripts)
     .task('serve', serve);
 
-function scripts() { 
+function scripts() {
   var bundler = browserify({
     entries: ['./client/index.jsx'],
     transform: [reactify], // We want to convert JSX to normal javascript
@@ -22,7 +22,7 @@ function scripts() {
   return watcher
     .on('update', function() {
       var updateStart = Date.now();
-      console.log('Updating!');
+
       watcher.bundle()
       .on('error', function(err) {
         console.log('Error with compiling components', err.message);
