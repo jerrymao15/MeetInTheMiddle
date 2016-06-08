@@ -7,11 +7,14 @@ import App from '../client/components/app';
 
 describe("Add UserLogin to SignUp page", function() {
   it("should have user login component", function() {
-    expect(mount(<App />).find('UserLogin').length).to.equal(1);
+    const wrapper = mount(<App />);
+    wrapper.setState({currentPage: 'signUpPage'});
+    expect(wrapper.find('UserLogin').length).to.equal(1);
   });
 
-  it('should have 5 props being passed down', function() {
-    const wrapper = mount(<App />).find('UserLogin').props();
-    expect(Object.keys(wrapper).length).to.equal(5);
+  it('should have 5 props being passed down!', function() {
+    const wrapper = mount(<App />);
+    wrapper.setState({currentPage: 'signUpPage'});
+    expect(Object.keys(wrapper.find('UserLogin').props()).length).to.equal(5);
   });
 });
