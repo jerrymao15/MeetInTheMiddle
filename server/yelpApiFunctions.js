@@ -24,10 +24,14 @@ yelpApiFunctions.generateUrl = function(req, res, next) {
   const coords = `${req.body.averageLocation[0]},${req.body.averageLocation[1]}`
   let cat = '';
   //TODO impliment defaults
-  req.body.categories.forEach(cata => {
-    cat += ',' + cata.toLowerCase().replace(/(\s.*)/, '');
-  });
-  parameters.category_filter = cat.replace(',', '');
+  if (req.body.categories) {
+    req.body.categories.forEach(cata => {
+      cat += ',' + cata.toLowerCase().replace(/(\s.*)/, '');
+    });
+    parameters.category_filter = cat.replace(',', '');
+  } else {
+    parameters.category_filter = 'restaurants';
+  }
   parameters.ll = coords;
   parameters.oauth_consumer_key = consumerKey;
   parameters.oauth_token = token;
