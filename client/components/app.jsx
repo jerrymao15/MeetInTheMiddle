@@ -83,8 +83,6 @@ var App = React.createClass({
     for (let i = 0; i < addressFormData.inputArray.length; i++) {
       friends.push(addressFormData.inputArray[i].name)
     }
-    // Only posting addressFormData for now
-    console.log('inside success function for ajax meet');
     $.ajax({
       type: 'POST',
       url: 'http://localhost:3000/meet',
@@ -157,7 +155,6 @@ var App = React.createClass({
       alert('Please fill out all fields ;)');
     }
 
-    console.log(userDataObj.userData);
     $.ajax({
       type: 'POST',
       url: 'http://localhost:3000/createuser',
@@ -242,8 +239,6 @@ var App = React.createClass({
         categories:temp
       });
     }
-    console.log(e.target.value);
-    console.log(e.target.checked);
   },
 
   findDistance: function(i) {
@@ -267,7 +262,6 @@ var App = React.createClass({
       url: 'http://localhost:3000/distance',
       data: object,
       success: function (response) {
-        console.log(response);
         this.setState({
           travelData: response
         });
