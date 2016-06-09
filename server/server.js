@@ -42,7 +42,6 @@ app.post('/meet',
   dataHandler.sendOutput);
 
 app.post('/createuser', databaseOps.createUser, (req, res) => {
-  console.log(req.body.databaseResponse);
 	if (req.body.databaseResponse.hasOwnProperty('errors')) return res.status(404).end();
 	res.send(req.body.databaseResponse);
 });
