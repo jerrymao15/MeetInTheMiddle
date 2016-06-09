@@ -435,3 +435,10 @@ there.
   border: 1px grey solid;
   border-radius: 10px;
 }
+
+.contact-list-dropdown {
+  border: solid black 1px;
+  height: 300px;
+  width: 100%;
+  overflow: scroll;
+}
