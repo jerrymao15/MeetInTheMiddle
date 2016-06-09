@@ -19,8 +19,10 @@ var ListItem = React.createClass({
       <Space x={2} />
       <Block
         borderLeft
+        borderColor="grey"
+        mx={3}
         color="black"
-        px="3"
+        px={3}
       >
         <Text
           level={1}
@@ -29,18 +31,17 @@ var ListItem = React.createClass({
             {friend.toUpperCase()}
         </Text>
         <Stat
-          value={distance.replace(/\D/g,'')}
+          value={distance.replace(/[A-Za-z]/g,'')}
           unit="mi"
-          distance="distance"
+          label="how far you are"
           />
         <Space x={3} />
         <Stat
-          value={time.replace(/\D/g,'')}
+          value={time.replace(/[A-Za-z]/g,'')}
           unit="min"
-          time="time"
+          label="you better get going"
           />
       </Block>
-      <Space x={2} />
       </div>
     )
   },
@@ -66,16 +67,16 @@ var ListItem = React.createClass({
   render: function() {
     return (
       <div className="four columns singleItem yelp" onClick={this.handleClick}>
-        <Panel theme="primary">
+        <Panel theme="secondary">
           <PanelHeader
             inverted
-            theme="default"
+            theme="secondary"
             >
             {this.props.name}
           </PanelHeader>
           <img role="presentation" src={this.props.ratingImgURL} />
           <Text>
-            Phone: {this.props.phone}
+            Phone: {this.props.phone} <br />
             {this.props.text}
           </Text>
         </Panel>
