@@ -39,7 +39,7 @@ class AddressBookContainer extends Component {
         <div style={{display: 'inline-block'}}>
           <div style={{marginLeft: 'auto', marginRight: 'auto'}}>
             <h4 style={{float: 'left'}}>Address Book</h4>
-            <button style={{marginLeft: '16px'}} onClick={this.handleOpenModal}>Add</button>
+            <button className="button-primary" style={{marginLeft: '16px'}} onClick={this.handleOpenModal}>Add</button>
           </div>
           <br/>
           <AddressBook
