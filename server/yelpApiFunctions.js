@@ -52,7 +52,7 @@ yelpApiFunctions.queryLocationData = function(req, res, next) {
   request(req.body.requestUrl, function (error, response, body) {
     if (error) return res.status(400).send(error);
     const data = JSON.parse(body);
-    const RESULTS = 2;
+    const RESULTS = 10;
     req.body.businessArray = data.businesses.slice(0, RESULTS);
     next();
   })

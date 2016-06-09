@@ -373,50 +373,49 @@ var App = React.createClass({
   },
 
   render: function () {
-    if (this.state.currentPage === 'addressesPage') {
-      return (
-        <div>
-          <h4>Who do you want to meet?</h4>
-          <AddressFormsContainer
-            onClose={this.handleOnClose}
-            formValuesArr={this.state.sourceAddressArr}
-            onNameChange={this.handleAddressFormNameChange}
-            onStreetChange={this.handleAddressFormStreetChange}
-            onCityChange={this.handleAddressFromCityChange}
-            onStateChange={this.handleAddressFromStateChange}
-            />
-          <hr />
-          <h4>Where do you want to meet?</h4>
-          <div className="row">
-            {this.addActivities()}
+    let page;
+    switch(this.state.currentPage) {
+      case 'addressesPage':
+        page = (
+          <div>
+            <h4>Who do you want to meet?</h4>
+            <AddressFormsContainer
+              onClose={this.handleOnClose}
+              formValuesArr={this.state.sourceAddressArr}
+              onNameChange={this.handleAddressFormNameChange}
+              onStreetChange={this.handleAddressFormStreetChange}
+              onCityChange={this.handleAddressFromCityChange}
+              onStateChange={this.handleAddressFromStateChange}
+              />
+            <hr />
+            <h4>Where do you want to meet?</h4>
+            <div className="row">
+              {this.addActivities()}
+            </div>
+            <button className="button-primary" onClick={this.submitInputData}>Meet in the middle!</button>
+            <hr />
+            <AddressBookContainer
+              contactNames={this.state.contacts}
+              handleContactNameClick={this.handleContactNameClick}
+              handleAddAddress={this.handleAddAddress}
+              handleChangeAddName={this.handleChangeAddName}
+              handleChangeAddStreet={this.handleChangeAddStreet}
+              handleChangeAddCity={this.handleChangeAddCity}
+              handleChangeAddState={this.handleChangeAddState} />
+              {
+                this.state.isShowingModal &&
+                <ModalContainer onClose={this.handleCloseModal}>
+                  <ModalDialog onClose={this.handleCloseModal}>
+                    <h4>{this.state.errorMessage}</h4>
+                  </ModalDialog>
+                </ModalContainer>
+              }
           </div>
-          <button className="button-primary" onClick={this.submitInputData}>Meet in the middle!</button>
-
-          <hr />
-          <AddressBookContainer
-            contactNames={this.state.contacts}
-            handleContactNameClick={this.handleContactNameClick}
-            handleAddAddress={this.handleAddAddress}
-            handleChangeAddName={this.handleChangeAddName}
-            handleChangeAddStreet={this.handleChangeAddStreet}
-            handleChangeAddCity={this.handleChangeAddCity}
-            handleChangeAddState={this.handleChangeAddState} />
-          <button className='button-primary' onClick={this.logout}>Logout</button>
-          {
-            this.state.isShowingModal &&
-            <ModalContainer onClose={this.handleCloseModal}>
-              <ModalDialog onClose={this.handleCloseModal}>
-                <h4>{this.state.errorMessage}</h4>
-              </ModalDialog>
-            </ModalContainer>
-          }
-        </div>
-      );
-    }
-
-    if (this.state.currentPage === 'resultsPage') {
-      return (
-        <div>
+        );
+        break;
+      case 'resultsPage':
+        page = (
+          <div>
           <MapResults data={this.state.resultsData} />
           <ResultList
             data={this.state.resultsData}
@@ -424,37 +423,12 @@ var App = React.createClass({
             travelData={this.state.travelData}
             friends ={this.state.friends}
             />
-        </div>
-      );
-    }
-
-    if (this.state.currentPage === 'signUpPage') {
-      return (
-        <div>
-          <SignUp onSubmit={this.signUpUser} />
-          {
-            this.state.isShowingModal &&
-            <ModalContainer onClose={this.handleCloseModal}>
-              <ModalDialog onClose={this.handleCloseModal}>
-                <h5>{this.state.errorMessage}</h5>
-              </ModalDialog>
-            </ModalContainer>
-          }
-        </div>
-      );
-    }
-
-    if (this.state.currentPage === 'loginPage') {
-      return (
-        <div>
-          <UserLogin
-            userValue={this.state.username}
-            passwordValue ={this.state.password}
-            handleSubmit={this.handleSubmit}
-            handleUserChange={this.handleUserChange}
-            handlePasswordChange={this.handlePasswordChange}
-            onClick={this.handleRegisterAccount}
-            />
+        </div>)
+        break;
+      case 'signUpPage':
+        page = (
+          <div>
+            <SignUp onSubmit={this.signUpUser} />;
             {
               this.state.isShowingModal &&
               <ModalContainer onClose={this.handleCloseModal}>
@@ -463,11 +437,45 @@ var App = React.createClass({
                 </ModalDialog>
               </ModalContainer>
             }
-        </div>
-      );
+          </div>
+        );
+        break;
+      case 'loginPage':
+        page = (
+          <div>
+            <UserLogin
+              userValue={this.state.username}
+              passwordValue ={this.state.password}
+              handleSubmit={this.handleSubmit}
+              handleUserChange={this.handleUserChange}
+              handlePasswordChange={this.handlePasswordChange}
+              onClick={this.handleRegisterAccount}
+              />
+            {
+              this.state.isShowingModal &&
+              <ModalContainer onClose={this.handleCloseModal}>
+                <ModalDialog onClose={this.handleCloseModal}>
+                  <h5>{this.state.errorMessage}</h5>
+                </ModalDialog>
+              </ModalContainer>
+            }
+          </div>
+        );
+      default:
+        break;
     }
+    return (
+      <div>
+        <div style={{marginLeft: 'auto', marginRight: 'auto'}}>
+          <h1>Meet In The Middle</h1>
+          {(this.state.currentPage === 'resultsPage'
+          || this.state.currentPage === 'addressesPage')
+          && <button style={{float: 'right'}} onClick={this.logout}>Logout</button>}
+        </div>
+        {page}
+      </div>
+    )
   },
 
 });
-
 module.exports = App;
