@@ -28,6 +28,8 @@ var App = React.createClass({
         city: '',
         state: '',
       },
+      isShowingModal: false,
+      errorMessage: '',
       sourceAddressArr: [],
       contacts: ['Add Custom Address'],
       friends: [],
@@ -68,8 +70,11 @@ var App = React.createClass({
         });
       }.bind(this),
       error: function(err) {
-        console.log('error processing input data', err);
-      }
+        this.setState({
+          isShowingModal: true,
+          errorMessage: 'Invalid Address. Please try again.',
+        });
+      }.bind(this),
     });
   },
   //userlogin for all these handlers below (3)
@@ -99,8 +104,11 @@ var App = React.createClass({
         });
       }.bind(this),
       error: function(err) {
-        return alert('Wrong Info');
-      }
+        this.setState({
+          isShowingModal: true,
+          errorMessage: 'Username and password do not match, please try again',
+        });
+      }.bind(this),
     });
   },
 
@@ -129,12 +137,17 @@ var App = React.createClass({
     e.preventDefault();
     var userDataObj = { userData: this.userData() };
 
-    if (userDataObj.userData.firstname === '' ||
-    userDataObj.userData.lastname === '' ||
-    userDataObj.userData.password === '' ||
-    userDataObj.userData.username === '') {
-      alert('Please fill out all fields ;)');
-    }
+    // if (userDataObj.userData.firstname === '' ||
+    // userDataObj.userData.lastname === '' ||
+    // userDataObj.userData.password === '' ||
+    // userDataObj.userData.username === '') {
+    //   this.setState({
+    //     isShowingModal: true,
+    //     errorMessage: 'Please fill out all fields.',
+    //   });
+    // }
+
+    //error handling moved into ajax when posting to db
     $.ajax({
       type: 'POST',
       url: 'http://localhost:3000/createuser',
@@ -145,8 +158,11 @@ var App = React.createClass({
         });
       }.bind(this),
       error: function(err) {
-        return alert('Username already exists, please choose another one');
-      }
+        this.setState({
+          isShowingModal: true,
+          errorMessage: 'Error: Please try another username and make sure all fields are filled out',
+        });
+      }.bind(this),
     });
   },
 
@@ -223,8 +239,6 @@ var App = React.createClass({
   },
 
   handleOnClose: function(i, e) {
-    console.log(i);
-    console.log(e);
     e.preventDefault();
     let copy = this.state.sourceAddressArr;
     copy.splice(i, 1);
@@ -297,7 +311,7 @@ var App = React.createClass({
         });
       }.bind(this),
       error: function(err) {
-        console.log('something fucked up');
+        console.log('error finding distance: ', err);
       }
     });
   },
@@ -344,12 +358,20 @@ var App = React.createClass({
       sourceAddressArr: newSourceAddressArr,
     });
   },
+
   handleRegisterAccount: function(e) {
     e.preventDefault();
     this.setState({
       currentPage: 'signUpPage',
     })
   },
+
+  handleCloseModal(e) {
+    this.setState({
+      isShowingModal: false,
+    });
+  },
+
   render: function () {
     if (this.state.currentPage === 'addressesPage') {
       return (
@@ -380,6 +402,14 @@ var App = React.createClass({
             handleChangeAddCity={this.handleChangeAddCity}
             handleChangeAddState={this.handleChangeAddState} />
           <button className='button-primary' onClick={this.logout}>Logout</button>
+          {
+            this.state.isShowingModal &&
+            <ModalContainer onClose={this.handleCloseModal}>
+              <ModalDialog onClose={this.handleCloseModal}>
+                <h4>{this.state.errorMessage}</h4>
+              </ModalDialog>
+            </ModalContainer>
+          }
         </div>
       );
     }
@@ -399,11 +429,24 @@ var App = React.createClass({
     }
 
     if (this.state.currentPage === 'signUpPage') {
-      return <SignUp onSubmit={this.signUpUser} />;
+      return (
+        <div>
+          <SignUp onSubmit={this.signUpUser} />
+          {
+            this.state.isShowingModal &&
+            <ModalContainer onClose={this.handleCloseModal}>
+              <ModalDialog onClose={this.handleCloseModal}>
+                <h5>{this.state.errorMessage}</h5>
+              </ModalDialog>
+            </ModalContainer>
+          }
+        </div>
+      );
     }
 
     if (this.state.currentPage === 'loginPage') {
       return (
+        <div>
           <UserLogin
             userValue={this.state.username}
             passwordValue ={this.state.password}
@@ -412,6 +455,15 @@ var App = React.createClass({
             handlePasswordChange={this.handlePasswordChange}
             onClick={this.handleRegisterAccount}
             />
+            {
+              this.state.isShowingModal &&
+              <ModalContainer onClose={this.handleCloseModal}>
+                <ModalDialog onClose={this.handleCloseModal}>
+                  <h5>{this.state.errorMessage}</h5>
+                </ModalDialog>
+              </ModalContainer>
+            }
+        </div>
       );
     }
   },

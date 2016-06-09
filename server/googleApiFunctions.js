@@ -38,7 +38,7 @@ googleApiFunctions.getCoordinates = function(req, res, next) {
     })
     .catch(err => {
       res.status(404).send(err);
-      console.log('Failed promise somewhere');
+      console.log('Failed promise');
     })
 };
 
