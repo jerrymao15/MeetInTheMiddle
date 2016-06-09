@@ -437,3 +437,10 @@ there.
 .yelp {
   cursor:pointer;
 }
+
+.contact-list-dropdown {
+  border: solid black 1px;
+  height: 300px;
+  width: 100%;
+  overflow: scroll;
+}
