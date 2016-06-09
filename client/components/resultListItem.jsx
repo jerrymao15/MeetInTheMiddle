@@ -29,8 +29,7 @@ var ResultListItem = React.createClass({
       <div className="listItems">
         <Divider />
         <Divider
-          width={500}
-
+          width={250}
            />
         {suggestionList}
       </div>

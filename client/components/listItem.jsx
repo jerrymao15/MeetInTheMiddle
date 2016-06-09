@@ -1,7 +1,7 @@
 'use strict'
 const React = require('react');
 import {ModalContainer, ModalDialog} from 'react-modal-dialog';
-import {Container} from 'rebass';
+import { Block, Heading, Stat, Text, Space, Panel, PanelHeader} from 'rebass';
 
 
 
@@ -13,16 +13,44 @@ var ListItem = React.createClass({
     }
   },
 
+  blockMaker: function(friend, distance, time) {
+    return (
+      <div>
+      <Space x={2} />
+      <Block
+        borderLeft
+        color="black"
+        px="3"
+      >
+        <Text
+          level={1}
+          size={0}
+          >
+            {friend.toUpperCase()}
+        </Text>
+        <Stat
+          value={distance.replace(/\D/g,'')}
+          unit="mi"
+          distance="distance"
+          />
+        <Space x={3} />
+        <Stat
+          value={time.replace(/\D/g,'')}
+          unit="min"
+          time="time"
+          />
+      </Block>
+      <Space x={2} />
+      </div>
+    )
+  },
+
   handleClick: function() {
     const renderArr = [];
     this.props.findDistance();
     if (this.props.friends) {
       for(let i = 0; i < this.props.friends.length; i++) {
-        renderArr.push(<p>
-          Hey {this.props.friends[i]}! You are currently <span font-weight="bolder">{this.props.travelData[i].distance}</span> away.
-        It will take you <span font-weight="bolder">{this.props.travelData[i].travelTime}</span> to reach your destination bruh.
-        </p>
-      )
+        renderArr.push(this.blockMaker(this.props.friends[i], this.props.travelData[i].distance, this.props.travelData[i].travelTime))
     }
   }
     this.setState({
@@ -38,12 +66,19 @@ var ListItem = React.createClass({
   render: function() {
     return (
       <div className="four columns singleItem yelp" onClick={this.handleClick}>
-        <Container>
-        <h5>{this.props.name}</h5>
-        <p>Phone: {this.props.phone}</p>
-        <img role="presentation" src={this.props.ratingImgURL} />
-        <p>{this.props.text}</p>
-        </Container>
+        <Panel theme="primary">
+          <PanelHeader
+            inverted
+            theme="default"
+            >
+            {this.props.name}
+          </PanelHeader>
+          <img role="presentation" src={this.props.ratingImgURL} />
+          <Text>
+            Phone: {this.props.phone}
+            {this.props.text}
+          </Text>
+        </Panel>
         {
           this.state.isShowingModal &&
           <ModalContainer onClose={this.handleClose}>
