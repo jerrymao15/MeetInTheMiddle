@@ -22,7 +22,7 @@ var UserLogin = React.createClass({
             onChange={this.props.handlePasswordChange}
             placeholder="Enter password" />
           <br/>
-          <button>Login</button>
+          <button className="button-primary">Login</button>
           <br/>
           <a
             href="#"

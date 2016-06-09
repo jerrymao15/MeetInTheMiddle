@@ -15,7 +15,6 @@ var App = React.createClass({
 
   getInitialState: function () {
     return ({
-      numberOfPeople: 2,
       travelData: [],
       categories:[],
       currentPage: 'loginPage',
@@ -470,7 +469,7 @@ var App = React.createClass({
           <h1>Meet In The Middle</h1>
           {(this.state.currentPage === 'resultsPage'
           || this.state.currentPage === 'addressesPage')
-          && <button style={{float: 'right'}} onClick={this.logout}>Logout</button>}
+          && <button className="button-primary" style={{float: 'right'}} onClick={this.logout}>Logout</button>}
         </div>
         {page}
       </div>
